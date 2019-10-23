@@ -15,5 +15,14 @@
   "bugs": {
     "url": "https://github.com/stuv-mosbach/StuV-Companion-Backend-v2/issues"
   },
-  "homepage": "https://github.com/stuv-mosbach/StuV-Companion-Backend-v2#readme"
+  "homepage": "https://github.com/stuv-mosbach/StuV-Companion-Backend-v2#readme",
+  "dependencies": {
+    "agenda": "^2.1.0",
+    "agendash": "^1.0.0",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-basic-auth": "^1.2.0",
+    "mongoose": "^5.7.6"
+  }
 }
