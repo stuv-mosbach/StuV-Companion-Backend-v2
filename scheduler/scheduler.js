@@ -1,9 +1,16 @@
 var agenda = require('agenda');
 var dbProvider = require('../utils/dbConfig');
+var newsProvider = require('../datacollection/news/newsProvider');
 var dbString = dbProvider.getDBUrl() + 'agenda';
 
 
 var agent = new agenda({db: {address: dbString}});
+
+agent.define('Update News', async (job, done) => {
+    newsProvider.run()
+        .then(() => {done();})
+        .catch((err) => {done(err);});
+})
 
 agent.on('start', job => {
     console.log('Job %s starting', job.attrs.name);
