@@ -15,3 +15,10 @@ var newsSchema = new Schema({
 });
 
 exports.getNewsSchema = () => {return newsSchema};
+
+var courseSchema = new Schema({
+    course: String,
+    url: String,
+});
+
+exports.getCourseSchema = () => {return courseSchema};
