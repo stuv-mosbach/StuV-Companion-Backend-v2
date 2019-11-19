@@ -1,6 +1,7 @@
 var agenda = require('agenda');
 var dbProvider = require('../utils/dbConfig');
 var newsProvider = require('../datacollection/news/newsProvider');
+var courseProvider = require('../datacollection/courses/coursesProvider');
 var dbString = dbProvider.getDBUrl() + 'agenda';
 
 
@@ -10,7 +11,13 @@ agent.define('Update News', async (job, done) => {
     newsProvider.run()
         .then(() => {done();})
         .catch((err) => {done(err);});
-})
+});
+
+agent.define('Update Courses', async (job, done) => {
+    courseProvider.run()
+        .then(() => {done();})
+        .catch((err) => {done(err);});
+});
 
 agent.on('start', job => {
     console.log('Job %s starting', job.attrs.name);
