@@ -6,19 +6,22 @@ var lecture = mongoose.model('lectures', provider.getLectureSchema());
 
 exports.run = () => {
     return new Promise((resolve, reject) => {
-
+        updateLectures(resolve, reject);
     })
 }
 
 const updateLectures = (resolve, reject) => {
     var courses = loadCourses(reject);
+    var date = (new Date()).toString();
     courses.forEach(element => {
         iCalParser.main(element.url)
             .then((res) => {
                 res.forEach(e => {
                     e.course = element.course;
-                    updateDatabase(e, reject);
+                    updateDatabase(e, date, reject);
                 });
+                cleanUp(date, reject);
+                resolve();
             })
             .catch((err) => {
                 reject(err);
@@ -26,11 +29,21 @@ const updateLectures = (resolve, reject) => {
     });
 }
 
-const updateDatabase = (element, reject) => {
-    const data = {uid: element["uid"]};
+const updateDatabase = (element, date, reject) => {
+    const data = {uid: element["uid"], dtstamp: element["dtstamp"], dtstart: element["dtstart"], class: element["class"], created: element["created"], description: element["description"], 'last-modified': element["last-modified"], location: element["location"], summary: element["summary"], dtend: element["dtend"], course: element["course"], lastTouched: date};
     const options = { upsert: true, new: true, useFindAndModify: false };
-    const query = { validUntil: element["validUntil"] };
-    
+    const query = { uid: element["uid"] };
+    lecture.findOneAndUpdate(query, data, options)
+    .then((doc) => {
+        resolve();
+    })
+    .catch((err) => {
+        reject(err);
+    });
+}
+
+const cleanUp = (date, reject) => {
+
 }
 
 const loadCourses = (reject) => {
