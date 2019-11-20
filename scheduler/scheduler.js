@@ -3,6 +3,7 @@ var dbProvider = require('../utils/dbConfig');
 var newsProvider = require('../datacollection/news/newsProvider');
 var courseProvider = require('../datacollection/courses/coursesProvider');
 var eventsProvider = require('../datacollection/events/eventsProvider');
+var mensaplanProvider = require('../datacollection/mensaplan/mensaplanProvider');
 var dbString = dbProvider.getDBUrl() + 'agenda';
 
 
@@ -22,6 +23,12 @@ agent.define('Update Courses', async (job, done) => {
 
 agent.define('Update Events', async (job, done) => {
     eventsProvider.run()
+        .then(() => { done(); })
+        .catch((err) => { done(err); });
+});
+
+agent.define('Update Mensaplan', async (job, done) => {
+    mensaplanProvider.run()
         .then(() => { done(); })
         .catch((err) => { done(err); });
 });
