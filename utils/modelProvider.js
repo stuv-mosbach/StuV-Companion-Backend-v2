@@ -39,3 +39,14 @@ var eventSchema = new Schema({
   });
 
   exports.getEventSchema = () => {return eventSchema};
+
+var mensaplanSchema = new Schema({
+    validUntil: String,
+    Montag: [String],
+    Dienstag: [String],
+    Mittwoch: [String],
+    Donnerstag: [String],
+    Freitag: [String],
+});
+
+exports.getMensaplanSchema = () => {return mensaplanSchema};
