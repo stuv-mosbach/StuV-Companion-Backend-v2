@@ -18,7 +18,7 @@ var app = express()
 var port = process.env.PORT
 
 // start db
-mongoose.connect(dbConnectionString, { useNewUrlParser: true });
+mongoose.connect(dbConnectionString, { useNewUrlParser: true, useUnifiedTopology: true });
 var db = mongoose.connection;
 
 // start scheduler

@@ -43,7 +43,8 @@ const updateDatabase = (element, date, reject) => {
 }
 
 const cleanUp = (date, reject) => {
-
+    const query = {lastTouched: {$ne: date}};
+    lecture.find(query).remove();
 }
 
 const loadCourses = (reject) => {
