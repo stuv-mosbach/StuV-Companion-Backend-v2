@@ -6,6 +6,8 @@ var cors = require('cors');
 var agendash = require('agendash');
 var scheduler = require('./scheduler/scheduler');
 
+var apiRoutes = require('./api/routes');
+
 var mongoose = require('mongoose');
 var dbProvider = require('./utils/dbConfig');
 var dbConnectionString = dbProvider.getDBUrl() + dbProvider.getEnv();
@@ -35,7 +37,9 @@ app.use('/dashboard', basicAuth({
     },
     challenge: true,
     realm: 'stuvbackendadmin',
-}), agendash(scheduler.get()))
+}), agendash(scheduler.get()));
+
+app.use('/api', apiRoutes);
 
 // init express
 
