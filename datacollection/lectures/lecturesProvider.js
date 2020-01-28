@@ -3,6 +3,8 @@ var iCalParser = require('../../utils/iCalParser');
 var mongoose = require('mongoose');
 var provider = require('../../utils/modelProvider');
 var lecture = mongoose.model('lectures', provider.getLectureSchema());
+var course = mongoose.model('courses', provider.getCourseSchema());
+
 
 exports.run = () => {
     return new Promise((resolve, reject) => {
@@ -48,7 +50,7 @@ const cleanUp = (date, reject) => {
 }
 
 const loadCourses = (reject) => {
-    lecture.find({})
+    course.find({})
         .then((res) => {
             return res;
         })
