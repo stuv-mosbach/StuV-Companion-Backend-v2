@@ -10,14 +10,14 @@ var apiRoutes = require('./api/routes');
 
 var mongoose = require('mongoose');
 var dbProvider = require('./utils/dbConfig');
-var dbConnectionString = dbProvider.getDBUrl() + dbProvider.getEnv();
+var dbConnectionString = dbProvider.getDBUrl().concat("/" , dbProvider.getEnv());
 
 // Main routine
 
 // start express
 
 var app = express()
-var port = process.env.PORT
+var port = process.env.PORT;
 
 // start db
 mongoose.connect(dbConnectionString, { useNewUrlParser: true });
@@ -28,7 +28,11 @@ scheduler.run();
 
 // start routes
 
-app.use(cors);
+app.use(cors());
+
+app.get('/', (req, res) => {
+    res.send("Welcome to the Backend");
+});
 
 app.use('/dashboard', basicAuth({
     users: {
@@ -40,12 +44,8 @@ app.use('/dashboard', basicAuth({
 
 app.use('/api', apiRoutes);
 
-app.get('/', (req, res) => {
-    res.send("Welcome to the Backend");
-});
-
 // init express
 
-app.listen(port, () => {
+app.listen(parseInt(port), () => {
     console.log("Backend running on port: " + port);
 });
