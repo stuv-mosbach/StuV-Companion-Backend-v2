@@ -43,6 +43,6 @@ app.use('/api', apiRoutes);
 
 // init express
 
-app.listen(port, () => {
+app.listen(port, '0.0.0.0', () => {
     console.log("Backend running on port: " + port);
 });

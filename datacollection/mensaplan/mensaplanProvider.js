@@ -16,7 +16,7 @@ exports.run = () => {
 const updateMensaplan = (url, resolve, reject) => {
     crawler(url)
         .then((res) => {
-            createJSON(lineSplitter(res.text));
+            createJSON(lineSplitter(res.text), resolve, reject);
         })
         .catch((err) => {
             reject(err);

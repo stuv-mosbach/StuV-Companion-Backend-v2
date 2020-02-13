@@ -12,13 +12,21 @@ exports.run = () => {
     })
 }
 
-const updateLectures = (resolve, reject) => {
-    var courses = loadCourses(reject);
+const updateLectures = async (resolve, reject) => {
+    //var courses = await loadCourses(reject);
+    var courses = null;
+    await course.find({}, 'course url', function(err, res){
+        if (err) {
+            reject(err);
+        } else {
+            courses = res;
+        }
+    })
     var date = (new Date()).toString();
     courses.forEach(element => {
         iCalParser.main(element.url)
             .then((res) => {
-                res.forEach(e => {
+                res.events.forEach(e => {
                     e.course = element.course;
                     updateDatabase(e, date, reject);
                 });
@@ -37,7 +45,6 @@ const updateDatabase = (element, date, reject) => {
     const query = { uid: element["uid"] };
     lecture.findOneAndUpdate(query, data, options)
     .then((doc) => {
-        resolve();
     })
     .catch((err) => {
         reject(err);
@@ -49,12 +56,12 @@ const cleanUp = (date, reject) => {
     lecture.find(query).remove();
 }
 
-const loadCourses = (reject) => {
-    course.find({})
-        .then((res) => {
-            return res;
-        })
-        .catch((err) => {
+const loadCourses = async (reject) => {
+    course.find({}, 'course url', function(err, res){
+        if (err) {
             reject(err);
-        })
+        } else {
+            return res;
+        }
+    })
 }
