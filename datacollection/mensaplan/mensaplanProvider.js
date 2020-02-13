@@ -16,7 +16,7 @@ exports.run = () => {
 const updateMensaplan = (url, resolve, reject) => {
     crawler(url)
         .then((res) => {
-            createJSON(lineSplitter(res.text));
+            createJSON(lineSplitter(res.text), resolve, reject);
         })
         .catch((err) => {
             reject(err);
@@ -30,31 +30,31 @@ const createJSON = (data, resolve, reject) => {
     var thursday = [];
     var friday = [];
     for (let i = 0; i < data.length; i++) {
-        if (data[i] == "Montag: " || data[i] == "Montag ") {
+        if (data[i].match(/\s*Montag\s*/g)/*data[i] == "Montag: " || data[i] == "Montag "*/) {
             for (let j = i + 1; j < data.length; j++) {
                 if (data[j] == " ") break;
                 monday.push(data[j])
             }
         }
-        if (data[i] == "Dienstag: " || data[i] == "Dienstag ") {
+        if (data[i].match(/\s*Dienstag\s*/g)/*data[i] == "Dienstag: " || data[i] == "Dienstag "*/) {
             for (let k = i + 1; k < data.length; k++) {
                 if (data[k] == " ") break;
                 tuesday.push(data[k])
             }
         }
-        if (data[i] == "Mittwoch: " || data[i] == "Mittwoch ") {
+        if (data[i].match(/\s*Mittwoch\s*/g)/*data[i] == "Mittwoch: " || data[i] == "Mittwoch "*/) {
             for (let l = i + 1; l < data.length; l++) {
                 if (data[l] == " ") break;
                 wednesday.push(data[l])
             }
         }
-        if (data[i] == "Donnerstag: " || data[i] == "Donnerstag ") {
+        if (data[i].match(/\s*Donnerstag\s*/g)/*data[i] == "Donnerstag: " || data[i] == "Donnerstag "*/) {
             for (let m = i + 1; m < data.length; m++) {
                 if (data[m] == " ") break;
                 thursday.push(data[m])
             }
         }
-        if (data[i] == "Freitag: " || data[i] == "Freitag ") {
+        if (data[i].match(/\s*Freitag\s*/g)/*data[i] == "Freitag: " || data[i] == "Freitag "*/) {
             for (let n = i + 1; n < data.length; n++) {
                 if (data[n] == " ") break;
                 friday.push(data[n])

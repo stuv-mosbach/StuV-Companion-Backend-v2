@@ -6,6 +6,8 @@ var cors = require('cors');
 var agendash = require('agendash');
 var scheduler = require('./scheduler/scheduler');
 
+var apiRoutes = require('./api/routes');
+
 var mongoose = require('mongoose');
 var dbProvider = require('./utils/dbConfig');
 var dbConnectionString = dbProvider.getDBUrl() + dbProvider.getEnv();
@@ -18,7 +20,7 @@ var app = express()
 var port = process.env.PORT
 
 // start db
-mongoose.connect(dbConnectionString, { useNewUrlParser: true });
+mongoose.connect(dbConnectionString, { useNewUrlParser: true, useUnifiedTopology: true });
 var db = mongoose.connection;
 
 // start scheduler
@@ -35,10 +37,12 @@ app.use('/dashboard', basicAuth({
     },
     challenge: true,
     realm: 'stuvbackendadmin',
-}), agendash(scheduler.get()))
+}), agendash(scheduler.get()));
+
+app.use('/api', apiRoutes);
 
 // init express
 
-app.listen(port, () => {
+app.listen(port, '0.0.0.0', () => {
     console.log("Backend running on port: " + port);
 });

@@ -18,7 +18,7 @@ exports.getNewsSchema = () => {return newsSchema};
 
 var courseSchema = new Schema({
     course: String,
-    url: String,
+    url: String
 });
 
 exports.getCourseSchema = () => {return courseSchema};
@@ -46,7 +46,24 @@ var mensaplanSchema = new Schema({
     Dienstag: [String],
     Mittwoch: [String],
     Donnerstag: [String],
-    Freitag: [String],
+    Freitag: [String]
 });
 
 exports.getMensaplanSchema = () => {return mensaplanSchema};
+
+var lectureSchema = new Schema({
+    uid: String,
+    dtstamp: String,
+    dtstart: String,
+    class: String,
+    created: String,
+    description: String,
+    'last-modified': String,
+    location: String,
+    summary: String,
+    dtend: String,
+    course: String,
+    lastTouched: String
+});
+
+exports.getLectureSchema = () => {return lectureSchema};

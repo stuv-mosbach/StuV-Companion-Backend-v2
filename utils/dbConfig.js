@@ -7,5 +7,5 @@ exports.getDBUrl = () => {
 }
 
 exports.getEnv = () => {
-    return env;
+    return "/" + env;
 }
