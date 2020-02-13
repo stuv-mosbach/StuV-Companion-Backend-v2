@@ -17,7 +17,7 @@ RUN npm install
 COPY --chown=node:node . .
 
 # Publish the app port
-EXPOSE 8090
+EXPOSE 8080
 
 # run
 CMD [ "node", "./backend.js" ]
