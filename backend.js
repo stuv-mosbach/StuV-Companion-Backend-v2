@@ -21,7 +21,6 @@ var port = process.env.PORT
 
 // start db
 mongoose.connect(dbConnectionString, { useNewUrlParser: true });
-var db = mongoose.connection;
 
 // start scheduler
 
@@ -40,6 +39,10 @@ app.use('/dashboard', basicAuth({
 }), agendash(scheduler.get()));
 
 app.use('/api', apiRoutes);
+
+app.get('/', (req, res) => {
+    res.send("Welcome to the Backend");
+});
 
 // init express
 
