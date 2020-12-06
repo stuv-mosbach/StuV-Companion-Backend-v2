@@ -1,6 +1,6 @@
 {
   "name": "stuv-companion-backend",
-  "version": "2.0.0",
+  "version": "2.0.3",
   "description": "The backend for the StuV Companion App",
   "main": "backend.js",
   "scripts": {
