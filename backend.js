@@ -2,6 +2,7 @@ require('dotenv').config();
 var express = require('express');
 var basicAuth = require('express-basic-auth');
 var cors = require('cors');
+const path = require('path');
 
 var agendash = require('agendash');
 var scheduler = require('./scheduler/scheduler');
@@ -12,12 +13,14 @@ var mongoose = require('mongoose');
 var dbProvider = require('./utils/dbConfig');
 var dbConnectionString = dbProvider.getDBUrl().concat("/" , dbProvider.getEnv());
 
+const appConfig = require(path.resolve(process.cwd() +'/config.json'));
+
 // Main routine
 
 // start express
 
 var app = express()
-var port = process.env.PORT;
+var port = appConfig.webserver.port;
 
 // start db
 mongoose.connect(dbConnectionString, { useNewUrlParser: true });
