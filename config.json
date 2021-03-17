@@ -4,6 +4,11 @@
     },
     "db": {
         "host": "",
-        "port": 0
+        "port": 0,
+        "env": "Prod"
+    },
+    "staticUrls": {
+        "mensa": "",
+        "news": ""
     }
 }

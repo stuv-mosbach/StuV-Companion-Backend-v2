@@ -1,5 +1,5 @@
 const agenda = require('agenda');
-const dbProvider = require('../utils/dbConfig');
+const dbProvider = new (require('../utils/dbConfig'));
 const newsProvider = require('../datacollection/news/newsProvider');
 const courseProvider = require('../datacollection/courses/coursesProvider');
 const eventsProvider = require('../datacollection/events/eventsProvider');

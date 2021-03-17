@@ -1,54 +1,50 @@
 require('dotenv').config();
+
+const path = require('path');
+const config = require(path.resolve(process.cwd() + '/config.json'));
+
 const express = require('express');
 const basicAuth = require('express-basic-auth');
 const cors = require('cors');
-const path = require('path');
+
 
 const agendash = require('agendash');
-const scheduler = require('./scheduler/scheduler');
+// const scheduler = require('./scheduler/scheduler');
 
-const apiRoutes = require('./api/routes');
+// const apiRoutes = require('./api/routes');
 
-const mongoose = require('mongoose');
+
 const dbProvider = require('./utils/dbConfig');
-const dbConnectionString = dbProvider.getDBUrl().concat("/" , dbProvider.getEnv());
-
-const appConfig = require(path.resolve(process.cwd() +'/config.json'));
+const dbAdapater = new dbProvider(config.db.host, config.db.port, config.db.env);
 
 // Main routine
 
 // start express
 
-const app = express()
-const port = appConfig.webserver.port;
-
-// start db
-mongoose.connect(dbConnectionString, { useNewUrlParser: true });
+const app = express();
 
 // start scheduler
-
-scheduler.run();
+// scheduler.run();
 
 // start routes
-
 app.use(cors());
 
 app.get('/', (req, res) => {
     res.send("Welcome to the Backend");
 });
 
-app.use('/dashboard', basicAuth({
-    users: {
-        admin: process.env.PASSWORD,
-    },
-    challenge: true,
-    realm: 'stuvbackendadmin',
-}), agendash(scheduler.get()));
+// app.use('/dashboard', basicAuth({
+//     users: {
+//         admin: process.env.PASSWORD,
+//     },
+//     challenge: true,
+//     realm: 'stuvbackendadmin',
+// }), agendash(scheduler.get()));
 
-app.use('/api', apiRoutes);
+// app.use('/api', apiRoutes);
 
 // init express
 
-app.listen(parseInt(port), () => {
-    console.log("Backend running on port: " + port);
+app.listen(config.webserver.port, () => {
+    // console.log("Backend running on port: " + port);
 });
