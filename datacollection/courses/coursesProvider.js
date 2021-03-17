@@ -1,8 +1,8 @@
-var axios = require('axios');
+const axios = require('axios');
 
-var mongoose = require('mongoose');
-var provider = require('../../utils/modelProvider');
-var course = mongoose.model('courses', provider.getCourseSchema());
+const mongoose = require('mongoose');
+const provider = require('../../utils/modelProvider');
+const course = mongoose.model('courses', provider.getCourseSchema());
 
 const courseUrl = "http://ics.mosbach.dhbw.de/ics/calendars.list";
 
@@ -15,7 +15,7 @@ exports.run = () => {
 const updateCourses = (url, resolve, reject) => {
     axios.get(url)
         .then((res) => {
-            var courses = formatAndCleanUp(res.data);
+            const courses = formatAndCleanUp(res.data);
             courses.forEach(element => {
                 updateDatabase(element, reject);
             });
@@ -31,7 +31,7 @@ const formatAndCleanUp = (data) => {
     const year = (new Date()).getFullYear().toString().substr(2);
     const lines = data.split('\n');
     lines.forEach(element => {
-        var entry = element.split(';');
+        const entry = element.split(';');
         if ((entry[0].match(/\d+/g)) != null && (entry[0].match(/\d+/g))[0] > (year - 4)) {
             result.push({ course: entry[0], url: entry[1] });
         }

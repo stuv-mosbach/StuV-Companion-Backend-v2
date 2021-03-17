@@ -1,9 +1,9 @@
-var iCalParser = require('../../utils/iCalParser');
+const iCalParser = require('../../utils/iCalParser');
 
-var mongoose = require('mongoose');
-var provider = require('../../utils/modelProvider');
-var lecture = mongoose.model('lectures', provider.getLectureSchema());
-var course = mongoose.model('courses', provider.getCourseSchema());
+const mongoose = require('mongoose');
+const provider = require('../../utils/modelProvider');
+const lecture = mongoose.model('lectures', provider.getLectureSchema());
+const course = mongoose.model('courses', provider.getCourseSchema());
 
 
 exports.run = () => {
@@ -13,8 +13,8 @@ exports.run = () => {
 }
 
 const updateLectures = async (resolve, reject) => {
-    //var courses = await loadCourses(reject);
-    var courses = null;
+    //const courses = await loadCourses(reject);
+    let courses = [];
     await course.find({}, 'course url', function(err, res){
         if (err) {
             reject(err);
@@ -22,7 +22,7 @@ const updateLectures = async (resolve, reject) => {
             courses = res;
         }
     })
-    var date = (new Date()).toString();
+    const date = (new Date()).toString();
     courses.forEach(element => {
         iCalParser.main(element.url)
             .then((res) => {
@@ -56,6 +56,7 @@ const cleanUp = (date, reject) => {
     lecture.find(query).remove();
 }
 
+//Not used?
 const loadCourses = async (reject) => {
     course.find({}, 'course url', function(err, res){
         if (err) {

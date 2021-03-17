@@ -1,5 +1,9 @@
 {
     "webserver": {
         "port": 80
+    },
+    "db": {
+        "host": "",
+        "port": 0
     }
 }

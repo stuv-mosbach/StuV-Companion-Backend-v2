@@ -1,17 +1,17 @@
 require('dotenv').config();
-var express = require('express');
-var basicAuth = require('express-basic-auth');
-var cors = require('cors');
+const express = require('express');
+const basicAuth = require('express-basic-auth');
+const cors = require('cors');
 const path = require('path');
 
-var agendash = require('agendash');
-var scheduler = require('./scheduler/scheduler');
+const agendash = require('agendash');
+const scheduler = require('./scheduler/scheduler');
 
-var apiRoutes = require('./api/routes');
+const apiRoutes = require('./api/routes');
 
-var mongoose = require('mongoose');
-var dbProvider = require('./utils/dbConfig');
-var dbConnectionString = dbProvider.getDBUrl().concat("/" , dbProvider.getEnv());
+const mongoose = require('mongoose');
+const dbProvider = require('./utils/dbConfig');
+const dbConnectionString = dbProvider.getDBUrl().concat("/" , dbProvider.getEnv());
 
 const appConfig = require(path.resolve(process.cwd() +'/config.json'));
 
@@ -19,8 +19,8 @@ const appConfig = require(path.resolve(process.cwd() +'/config.json'));
 
 // start express
 
-var app = express()
-var port = appConfig.webserver.port;
+const app = express()
+const port = appConfig.webserver.port;
 
 // start db
 mongoose.connect(dbConnectionString, { useNewUrlParser: true });

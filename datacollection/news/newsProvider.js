@@ -1,11 +1,11 @@
-var ReaderConstructor = require('rss-parser');
-var Reader = new ReaderConstructor();
+const ReaderConstructor = require('rss-parser');
+const Reader = new ReaderConstructor();
 
-var mongoose = require('mongoose');
-var provider = require('../../utils/modelProvider');
-var news = mongoose.model('news', provider.getNewsSchema());
+const mongoose = require('mongoose');
+const provider = require('../../utils/modelProvider');
+const news = mongoose.model('news', provider.getNewsSchema());
 
-var newsUrl = 'https://stuv-mosbach.de/feed/';
+const newsUrl = 'https://stuv-mosbach.de/feed/';
 
 exports.run = () => {
     return new Promise((resolve, reject) => {

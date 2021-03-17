@@ -1,11 +1,11 @@
 
-var iCalParser = require('../../utils/iCalParser');
+const iCalParser = require('../../utils/iCalParser');
 
-var mongoose = require('mongoose');
-var provider = require('../../utils/modelProvider');
-var event = mongoose.model('events', provider.getEventSchema());
+const mongoose = require('mongoose');
+const provider = require('../../utils/modelProvider');
+const event = mongoose.model('events', provider.getEventSchema());
 
-var calendarUrl = "https://calendar.google.com/calendar/ical/asta.dhbw.de_08mkcuqcrppq8cg8vlutdsgpjg%40group.calendar.google.com/public/basic.ics";
+const calendarUrl = "https://calendar.google.com/calendar/ical/asta.dhbw.de_08mkcuqcrppq8cg8vlutdsgpjg%40group.calendar.google.com/public/basic.ics";
 
 exports.run = () => {
     return new Promise((resolve, reject) => {

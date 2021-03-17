@@ -1,7 +1,7 @@
-var mongoose = require('mongoose')
-var Schema = mongoose.Schema;
+const mongoose = require('mongoose')
+const Schema = mongoose.Schema;
 
-var newsSchema = new Schema({
+const newsSchema = new Schema({
     creator: String,
     title: String,
     link: String,
@@ -16,14 +16,14 @@ var newsSchema = new Schema({
 
 exports.getNewsSchema = () => {return newsSchema};
 
-var courseSchema = new Schema({
+const courseSchema = new Schema({
     course: String,
     url: String
 });
 
 exports.getCourseSchema = () => {return courseSchema};
 
-var eventSchema = new Schema({
+const eventSchema = new Schema({
     dtstart: String,
     dtend: String,
     dtstamp: String,
@@ -40,7 +40,7 @@ var eventSchema = new Schema({
 
   exports.getEventSchema = () => {return eventSchema};
 
-var mensaplanSchema = new Schema({
+const mensaplanSchema = new Schema({
     validUntil: String,
     Montag: [String],
     Dienstag: [String],
@@ -51,7 +51,7 @@ var mensaplanSchema = new Schema({
 
 exports.getMensaplanSchema = () => {return mensaplanSchema};
 
-var lectureSchema = new Schema({
+const lectureSchema = new Schema({
     uid: String,
     dtstamp: String,
     dtstart: String,

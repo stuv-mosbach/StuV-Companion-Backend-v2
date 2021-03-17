@@ -1,14 +1,14 @@
-var agenda = require('agenda');
-var dbProvider = require('../utils/dbConfig');
-var newsProvider = require('../datacollection/news/newsProvider');
-var courseProvider = require('../datacollection/courses/coursesProvider');
-var eventsProvider = require('../datacollection/events/eventsProvider');
-var mensaplanProvider = require('../datacollection/mensaplan/mensaplanProvider');
-var lectureProvider = require('../datacollection/lectures/lecturesProvider');
-var dbString = dbProvider.getDBUrl() + '/agenda';
+const agenda = require('agenda');
+const dbProvider = require('../utils/dbConfig');
+const newsProvider = require('../datacollection/news/newsProvider');
+const courseProvider = require('../datacollection/courses/coursesProvider');
+const eventsProvider = require('../datacollection/events/eventsProvider');
+const mensaplanProvider = require('../datacollection/mensaplan/mensaplanProvider');
+const lectureProvider = require('../datacollection/lectures/lecturesProvider');
+const dbString = dbProvider.getDBUrl() + '/agenda';
 
 
-var agent = new agenda({ db: { address: dbString } });
+const agent = new agenda({ db: { address: dbString } });
 
 agent.define('Update News', async (job, done) => {
     newsProvider.run()

@@ -1,11 +1,11 @@
-var lineSplitter = require('split-lines');
-var crawler = require('crawler-request');
+const lineSplitter = require('split-lines');
+const crawler = require('crawler-request');
 
-var mongoose = require('mongoose');
-var provider = require('../../utils/modelProvider');
-var mensa = mongoose.model('mensaplans', provider.getMensaplanSchema());
+const mongoose = require('mongoose');
+const provider = require('../../utils/modelProvider');
+const mensa = mongoose.model('mensaplans', provider.getMensaplanSchema());
 
-var pdfUrl = "https://www.studentenwerk.uni-heidelberg.de/sites/default/files/download/pdf/sp-mos-mensa-aktuell.pdf";
+const pdfUrl = "https://www.studentenwerk.uni-heidelberg.de/sites/default/files/download/pdf/sp-mos-mensa-aktuell.pdf";
 
 exports.run = () => {
     return new Promise((resolve, reject) => {
@@ -24,11 +24,11 @@ const updateMensaplan = (url, resolve, reject) => {
 }
 
 const createJSON = (data, resolve, reject) => {
-    var monday = [];
-    var tuesday = [];
-    var wednesday = [];
-    var thursday = [];
-    var friday = [];
+    const monday = [];
+    const tuesday = [];
+    const wednesday = [];
+    const thursday = [];
+    const friday = [];
     for (let i = 0; i < data.length; i++) {
         if (data[i].match(/\s*Montag\s*/g)/*data[i] == "Montag: " || data[i] == "Montag "*/) {
             for (let j = i + 1; j < data.length; j++) {
@@ -61,8 +61,8 @@ const createJSON = (data, resolve, reject) => {
             }
         }
     }
-    var valid = data[5].substr((data[5].length - 11), data[5].length);
-    var object = {
+    const valid = data[5].substr((data[5].length - 11), data[5].length);
+    const object = {
         validUntil: valid,
         Montag: monday,
         Dienstag: tuesday,
