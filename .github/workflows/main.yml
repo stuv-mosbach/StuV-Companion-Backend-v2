@@ -12,7 +12,7 @@ jobs:
 
       - uses: mr-smithers-excellent/docker-build-push@v2
         with:
-          image: supporterino/stuv-backend
+          image: stuvmosbach/stuv-mosbach-backend
           registry: docker.io
           username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
+          password: ${{ secrets.DOCKER_TOKEN }}
