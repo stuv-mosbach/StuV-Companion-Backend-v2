@@ -12,14 +12,18 @@ module.exports = class DatabaseAdapter {
 
     }
 
+    /**
+     * @returns {Object} 
+     */
     async connect() {
         try {
             const connString = this.url.concat("/", this.env);
             if (!connString || !this.url || !this.env) throw new Error("Parsing of connection String failed!");
             mongoose.connect(connString, { useNewUrlParser: true, useUnifiedTopology: true });
-
+            return { status: 1 };
         } catch (e) {
             console.error(e);
+            return { status: -1 }
         }
     }
 

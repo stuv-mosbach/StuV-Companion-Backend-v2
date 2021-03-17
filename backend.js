@@ -46,5 +46,5 @@ app.get('/', (req, res) => {
 // init express
 
 app.listen(config.webserver.port, () => {
-    // console.log("Backend running on port: " + port);
+    dbAdapater.connect();
 });
