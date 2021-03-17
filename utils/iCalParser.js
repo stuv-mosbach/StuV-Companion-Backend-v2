@@ -35,19 +35,6 @@ module.exports = class ICalParser {
 				console.error(e);
 				return { status: -1 }
 			}
-			// rp(args).then((txt) => {
-			// 	try {
-			// 		let parsed = ical.parse(txt);
-			// 		let events = parsed[2];
-
-			// 		let result = [];
-			// 		events.forEach(e => result.push(flattenEvent(e)));
-			// 		resolve({ events: result });
-			// 	} catch (e) {
-			// 		console.log(e);
-			// 		reject(e.message);
-			// 	}
-			// })
 		} catch (e) {
 			console.error(e);
 			return { status: -1 }
@@ -55,27 +42,3 @@ module.exports = class ICalParser {
 
 	}
 }
-
-
-
-// exports.main = (args) => {
-
-// 	return new Promise((resolve, reject) => {
-// 		rp(args).then((txt) => {
-// 			try {
-// 				let parsed = ical.parse(txt);
-// 				let events = parsed[2];
-
-// 				let result = [];
-// 				events.forEach(e => result.push(flattenEvent(e)));
-// 				resolve({ events: result });
-// 			} catch (e) {
-// 				console.log(e);
-// 				reject(e.message);
-// 			}
-// 		})
-// 			.catch((e) => {
-// 				reject(e);
-// 			});
-// 	});
-// }
