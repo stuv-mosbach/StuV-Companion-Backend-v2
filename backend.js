@@ -30,9 +30,9 @@ process.on("exit", (code) => {
 
 
         const agendash = require('agendash');
-        // const scheduler = require('./scheduler/scheduler');
+        const scheduler = require('./scheduler/scheduler');
 
-        // const apiRoutes = require('./api/routes');
+        const apiRoutes = require('./api/routes');
 
 
         const dbProvider = require('./utils/dbConfig');
@@ -40,32 +40,38 @@ process.on("exit", (code) => {
 
         // Main routine
 
-        // start express
-
+        /**
+         * start express
+         */
         const app = express();
 
-        // start scheduler
-        // scheduler.run();
+        /**
+         * start scheduler
+         */
+        scheduler.run();
 
-        // start routes
+        /**
+         * start routes
+         */
         app.use(cors());
 
         app.get('/', (req, res) => {
             res.send("Welcome to the Backend");
         });
 
-        // app.use('/dashboard', basicAuth({
-        //     users: {
-        //         admin: process.env.PASSWORD,
-        //     },
-        //     challenge: true,
-        //     realm: 'stuvbackendadmin',
-        // }), agendash(scheduler.get()));
+        app.use('/dashboard', basicAuth({
+            users: {
+                admin: process.env.PASSWORD,
+            },
+            challenge: true,
+            realm: 'stuvbackendadmin',
+        }), agendash(scheduler.get()));
 
-        // app.use('/api', apiRoutes);
+        app.use('/api', apiRoutes);
 
-        // init express
-
+        /**
+         * init express  
+         * */
         app.listen(config.webserver.port, async () => {
             try {
                 dbAdapater.connect();
@@ -74,7 +80,6 @@ process.on("exit", (code) => {
             }
         });
     } catch (e) {
-        console.error(e);
-        process.send(new SystemMessage("error", "failure", 400, `process failed with ${e.message}`, process.argv[2], process.argv[3]))
+        console.error(e);        
     }
 })()

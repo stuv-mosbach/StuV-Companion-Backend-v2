@@ -3,9 +3,9 @@
         "port": 80
     },
     "db": {
-        "host": "",
-        "port": 0,
-        "env": "Prod"
+        "host": "mongodb://localhost",
+        "port": 27017,
+        "env": "Dev"
     },
     "staticUrls": {
         "mensa": "https://www.studentenwerk.uni-heidelberg.de/sites/default/files/download/pdf/sp-mos-mensa-aktuell.pdf",

@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const mongoose = require('mongoose');
-const provider = require('../utils/modelProvider');
+const provider = new (require('../utils/modelProvider'));
 
 const course = mongoose.model('courses', provider.getCourseSchema());
 const lecture = mongoose.model('lectures', provider.getLectureSchema());
@@ -18,23 +18,23 @@ router.get('/courses', (req, res) => {
 });
 
 router.get('/lectures/:course', (req, res) => {
-  lecture.find({course: req.params.course.toUpperCase()}, (err, data) => {
+  lecture.find({ course: req.params.course.toUpperCase() }, (err, data) => {
     if (err) res.json(err);
     const response = [];
-    data.forEach(e => response.push({start: e.dtstart, end: e.dtend, lastModified: e['last-modified'], title: e.summary, description: e.description, location: e.location, course: e.course}));
-    if (res == []) res.json({error: "No course found or there are no lectures yet!"});
+    data.forEach(e => response.push({ start: e.dtstart, end: e.dtend, lastModified: e['last-modified'], title: e.summary, description: e.description, location: e.location, course: e.course }));
+    if (res == []) res.json({ error: "No course found or there are no lectures yet!" });
     else res.json(response);
   });
 });
 
 router.get('/futureLectures/:course', (req, res) => {
-  lecture.find({course: req.params.course.toUpperCase()}, (err, data) => {
+  lecture.find({ course: req.params.course.toUpperCase() }, (err, data) => {
     if (err) res.json(err);
     const response = [];
     data.forEach(e => {
-      if((new Date(e.dtstart)) >= (new Date())) response.push({start: e.dtstart, end: e.dtend, lastModified: e['last-modified'], title: e.summary, description: e.description, location: e.location, course: e.course});
+      if ((new Date(e.dtstart)) >= (new Date())) response.push({ start: e.dtstart, end: e.dtend, lastModified: e['last-modified'], title: e.summary, description: e.description, location: e.location, course: e.course });
     });
-    if (res == []) res.json({error: "No course found or there are no lectures yet!"});
+    if (res == []) res.json({ error: "No course found or there are no lectures yet!" });
     else res.json(response);
   });
 });
@@ -49,25 +49,25 @@ router.get('/getToday/:course', async (req, res) => {
   mensa.find((err, data) => {
     if (err) res.json(err);
     data.forEach(e => {
-      if ((new Date()).getMonth() + 1 == e.validUntil.substring(3, 5) && (new Date()).toJSON().substring(8,10) <= e.validUntil.substring(0, 2)) men.push({validUntil: e.validUntil, montag: e.Montag, dienstag: e.Dienstag, mittwoch: e.Mittwoch, donnerstag: e.Donnerstag, freitag: e.Freitag});
+      if ((new Date()).getMonth() + 1 == e.validUntil.substring(3, 5) && (new Date()).toJSON().substring(8, 10) <= e.validUntil.substring(0, 2)) men.push({ validUntil: e.validUntil, montag: e.Montag, dienstag: e.Dienstag, mittwoch: e.Mittwoch, donnerstag: e.Donnerstag, freitag: e.Freitag });
     });
     //Todays lectures
-    lecture.find({course: req.params.course.toUpperCase()}, (err, data) => {
+    lecture.find({ course: req.params.course.toUpperCase() }, (err, data) => {
       if (err) res.json(err);
       data.forEach(e => {
-        if((new Date(e.dtstart)).setHours(0, 0, 0, 0) == (new Date()).setHours(0, 0, 0, 0)) lec.push({start: e.dtstart, end: e.dtend, lastModified: e['last-modified'], title: e.summary, description: e.description, location: e.location, course: e.course});
+        if ((new Date(e.dtstart)).setHours(0, 0, 0, 0) == (new Date()).setHours(0, 0, 0, 0)) lec.push({ start: e.dtstart, end: e.dtend, lastModified: e['last-modified'], title: e.summary, description: e.description, location: e.location, course: e.course });
       });
       //New news
       news.find((err, data) => {
         if (err) res.json(err);
         data.forEach(e => {
-          if((new Date(e.isoDate)).setHours(0, 0, 0, 0) == (new Date()).setHours(0, 0, 0, 0)) fee.push({title: e.title, description: e['content:encoded'], url: e.link, created: new Date(e.isoDate)});
+          if ((new Date(e.isoDate)).setHours(0, 0, 0, 0) == (new Date()).setHours(0, 0, 0, 0)) fee.push({ title: e.title, description: e['content:encoded'], url: e.link, created: new Date(e.isoDate) });
         });
         //Todays events
         event.find((err, data) => {
           if (err) res.json(err);
           data.forEach(e => {
-            if ((new Date(e.dtstart)).setHours(0, 0, 0, 0) == (new Date()).setHours(0, 0, 0, 0)) eve.push({start: e.dtstart, end: e.dtend, lastModified: e['last-modified'],title: e.summary, description: e.description,  location: e.location});
+            if ((new Date(e.dtstart)).setHours(0, 0, 0, 0) == (new Date()).setHours(0, 0, 0, 0)) eve.push({ start: e.dtstart, end: e.dtend, lastModified: e['last-modified'], title: e.summary, description: e.description, location: e.location });
           });
           eve.reverse();
           response.push(men);
@@ -86,9 +86,9 @@ router.get('/events', (req, res) => {
     if (err) res.json(err);
     const response = [];
     data.forEach(e => {
-      if((new Date(e.dtstart).setHours(0,0,0,0)) >= (new Date().setHours(0,0,0,0))) response.push({start: e.dtstart, end: e.dtend, lastModified: e['last-modified'],title: e.summary, description: e.description,  location: e.location});
+      if ((new Date(e.dtstart).setHours(0, 0, 0, 0)) >= (new Date().setHours(0, 0, 0, 0))) response.push({ start: e.dtstart, end: e.dtend, lastModified: e['last-modified'], title: e.summary, description: e.description, location: e.location });
     });
-    response.sort((a, b) => {return new Date(a.start) - new Date(b.start)});
+    response.sort((a, b) => { return new Date(a.start) - new Date(b.start) });
     res.json(response);
   });
 });
@@ -98,7 +98,7 @@ router.get('/mensaplan', (req, res) => {
     if (err) res.json(err);
     const response = [];
     data.forEach(e => {
-      if ((new Date()).getMonth() + 1 == e.validUntil.substring(3, 5) && (new Date()).toJSON().substring(8,10) <= e.validUntil.substring(0, 2)) response.push({validUntil: e.validUntil, montag: e.Montag, dienstag: e.Dienstag, mittwoch: e.Mittwoch, donnerstag: e.Donnerstag, freitag: e.Freitag});
+      if ((new Date()).getMonth() + 1 == e.validUntil.substring(3, 5) && (new Date()).toJSON().substring(8, 10) <= e.validUntil.substring(0, 2)) response.push({ validUntil: e.validUntil, montag: e.Montag, dienstag: e.Dienstag, mittwoch: e.Mittwoch, donnerstag: e.Donnerstag, freitag: e.Freitag });
     });
     res.json(response);
   });
@@ -108,7 +108,7 @@ router.get('/news', (req, res) => {
   news.find((err, data) => {
     if (err) res.json(err);
     const response = [];
-    data.forEach(e => response.push({title: e.title, description: e['content:encoded'], url: e.link, created: new Date(e.isoDate)}));
+    data.forEach(e => response.push({ title: e.title, description: e['content:encoded'], url: e.link, created: new Date(e.isoDate) }));
     response.reverse();
     res.json(response);
   });

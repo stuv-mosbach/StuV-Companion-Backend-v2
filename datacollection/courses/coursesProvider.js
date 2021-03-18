@@ -1,7 +1,7 @@
 const axios = require('axios');
 
 const mongoose = require('mongoose');
-const provider = require('../../utils/modelProvider');
+const provider = new (require('../../utils/modelProvider'));
 const course = mongoose.model('courses', provider.getCourseSchema());
 
 const courseUrl = "http://ics.mosbach.dhbw.de/ics/calendars.list";

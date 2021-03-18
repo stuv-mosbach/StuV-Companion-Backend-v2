@@ -1,69 +1,75 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema;
 
-const newsSchema = new Schema({
-    creator: String,
-    title: String,
-    link: String,
-    pubDate: String,
-    'content:encoded': String,
-    'dc:creator': String,
-    content: String,
-    contentSnippet: String,
-    guid: String,
-    isoDate: String
-});
 
-exports.getNewsSchema = () => {return newsSchema};
+module.exports = class ModelProvider {
+    constructor() {
+        this.newsSchema = new Schema({
+            creator: String,
+            title: String,
+            link: String,
+            pubDate: String,
+            'content:encoded': String,
+            'dc:creator': String,
+            content: String,
+            contentSnippet: String,
+            guid: String,
+            isoDate: String
+        });
 
-const courseSchema = new Schema({
-    course: String,
-    url: String
-});
+        this.courseSchema = new Schema({
+            course: String,
+            url: String
+        });
 
-exports.getCourseSchema = () => {return courseSchema};
+        this.eventSchema = new Schema({
+            dtstart: String,
+            dtend: String,
+            dtstamp: String,
+            uid: String,
+            created: String,
+            description: String,
+            'last-modified': String,
+            location: String,
+            sequence: Number,
+            status: String,
+            summary: String,
+            transp: String
+        });
 
-const eventSchema = new Schema({
-    dtstart: String,
-    dtend: String,
-    dtstamp: String,
-    uid: String,
-    created: String,
-    description: String,
-    'last-modified': String,
-    location: String,
-    sequence: Number,
-    status: String,
-    summary: String,
-    transp: String
-  });
+        this.mensaplanSchema = new Schema({
+            validUntil: String,
+            Montag: [String],
+            Dienstag: [String],
+            Mittwoch: [String],
+            Donnerstag: [String],
+            Freitag: [String]
+        });
 
-  exports.getEventSchema = () => {return eventSchema};
+        this.lectureSchema = new Schema({
+            uid: String,
+            dtstamp: String,
+            dtstart: String,
+            class: String,
+            created: String,
+            description: String,
+            'last-modified': String,
+            location: String,
+            summary: String,
+            dtend: String,
+            course: String,
+            lastTouched: String
+        });
+    }
 
-const mensaplanSchema = new Schema({
-    validUntil: String,
-    Montag: [String],
-    Dienstag: [String],
-    Mittwoch: [String],
-    Donnerstag: [String],
-    Freitag: [String]
-});
+    getNewsSchema() { return this.newsSchema };
 
-exports.getMensaplanSchema = () => {return mensaplanSchema};
+    getCourseSchema() { return this.courseSchema };
 
-const lectureSchema = new Schema({
-    uid: String,
-    dtstamp: String,
-    dtstart: String,
-    class: String,
-    created: String,
-    description: String,
-    'last-modified': String,
-    location: String,
-    summary: String,
-    dtend: String,
-    course: String,
-    lastTouched: String
-});
+    getEventSchema() { return this.eventSchema };
 
-exports.getLectureSchema = () => {return lectureSchema};
+    getMensaplanSchema() { return this.mensaplanSchema };
+
+    getLectureSchema() { return this.lectureSchema };
+
+}

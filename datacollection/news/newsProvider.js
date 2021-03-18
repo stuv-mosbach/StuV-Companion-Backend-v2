@@ -2,7 +2,7 @@ const ReaderConstructor = require('rss-parser');
 const Reader = new ReaderConstructor();
 
 const mongoose = require('mongoose');
-const provider = require('../../utils/modelProvider');
+const provider = new (require('../../utils/modelProvider'));
 const news = mongoose.model('news', provider.getNewsSchema());
 
 const newsUrl = 'https://stuv-mosbach.de/feed/';
