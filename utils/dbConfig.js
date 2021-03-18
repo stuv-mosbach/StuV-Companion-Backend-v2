@@ -19,7 +19,7 @@ module.exports = class DatabaseAdapter {
         try {
             const connString = this.url.concat("/", this.env);
             if (!connString || !this.url || !this.env) throw new Error("Parsing of connection String failed!");
-            mongoose.connect(connString, { useNewUrlParser: true, useUnifiedTopology: true });
+            await mongoose.connect(connString, { useNewUrlParser: true, useUnifiedTopology: true });
             return { status: 1 };
         } catch (e) {
             console.error(e);
