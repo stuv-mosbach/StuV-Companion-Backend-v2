@@ -32,7 +32,11 @@ module.exports = class DatabaseAdapter {
      * @returns {String} this.url - db connection url: host + ":" + port
      */
     async getDBUrl() {
-        return this.url;
+        try {
+            return this.url;
+        } catch (e) {
+            console.error(e);
+        }
     }
 
     /**
@@ -40,6 +44,10 @@ module.exports = class DatabaseAdapter {
      * @returns {String} this.env - db environment variable
      */
     async getEnv() {
-        return this.env;
+        try {
+            return this.env;
+        } catch (e) {
+            console.error(e);
+        }
     }
 }
