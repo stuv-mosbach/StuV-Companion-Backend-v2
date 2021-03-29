@@ -1,3 +1,5 @@
+"use strict";
+
 process.on("uncaughtExceptionMonitor", (err, origin) => {
     console.error(`child with pid=${process.pid} crashed with ${err} at`, origin);
     process.exit(400);

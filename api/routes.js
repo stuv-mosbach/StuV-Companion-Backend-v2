@@ -1,15 +1,17 @@
+"use strict";
+
 const router = require('express').Router();
 const mongoose = require('mongoose');
 const provider = new (require('../utils/modelProvider'));
 
-const course = mongoose.model('courses', provider.getCourseSchema());
+const courses = mongoose.model('courses', provider.getCourseSchema());
 const lecture = mongoose.model('lectures', provider.getLectureSchema());
 const event = mongoose.model('events', provider.getEventSchema());
 const mensa = mongoose.model('mensaplans', provider.getMensaplanSchema());
 const news = mongoose.model('news', provider.getNewsSchema());
 
 router.get('/courses', (req, res) => {
-  course.find((err, data) => {
+  courses.find((err, data) => {
     if (err) res.json(err);
     const response = [];
     data.forEach(e => response.push(e.course));

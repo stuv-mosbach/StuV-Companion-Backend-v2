@@ -1,6 +1,5 @@
-// const url = process.env.DB_HOST;
-// const port = process.env.DB_PORT;
-// const env = "Prod";
+"use strict";
+
 const mongoose = require('mongoose');
 
 module.exports = class DatabaseAdapter {
