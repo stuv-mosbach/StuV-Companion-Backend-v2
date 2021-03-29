@@ -2,17 +2,17 @@
 
 process.on("uncaughtExceptionMonitor", (err, origin) => {
     console.error(`child with pid=${process.pid} crashed with ${err} at`, origin);
-    process.exit(400);
+    process.exit(-1);
 });
 
 process.on("unhandledRejection", (e, origin) => {
     console.error(`Unhandled rejection in child with pid=${process.pid}. Crashed with ${e} at`, origin);
-    process.exit(400);
+    process.exit(-1);
 });
 
 process.on("uncaughtException", (e) => {
     console.error(`Uncaught exception in child with pid=${process.pid}: ${e}`);
-    process.exit(400);
+    process.exit(-1);
 });
 
 process.on("exit", (code) => {
@@ -32,7 +32,7 @@ process.on("exit", (code) => {
 
 
         const agendash = require('agendash');
-        const scheduler = require('./scheduler/scheduler');
+        const scheduler = new (require('./scheduler/scheduler'));
 
         const apiRoutes = require('./api/routes');
 

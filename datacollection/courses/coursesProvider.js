@@ -1,8 +1,8 @@
 const axios = require('axios');
 
-const mongoose = require('mongoose');
-const provider = new (require('../../utils/modelProvider'));
-const courses = mongoose.model('courses', provider.getCourseSchema());
+// const mongoose = require('mongoose');
+// const provider = new (require('../../utils/modelProvider'));
+// const courses = mongoose.model('courses', provider.getCourseSchema());
 
 const courseUrl = "http://ics.mosbach.dhbw.de/ics/calendars.list";
 
@@ -44,11 +44,11 @@ const updateDatabase = (element, reject) => {
     const options = { upsert: true, new: true, useFindAndModify: false };
     const query = { course: element["course"] };
 
-    courses.findOneAndUpdate(query, data, options)
-        .then((doc) => {
+    // courses.findOneAndUpdate(query, data, options)
+    //     .then((doc) => {
 
-        })
-        .catch((err) => {
-            reject(err);
-        });
+    //     })
+    //     .catch((err) => {
+    //         reject(err);
+    //     });
 }
