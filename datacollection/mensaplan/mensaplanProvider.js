@@ -2,7 +2,7 @@ const lineSplitter = require('split-lines');
 const crawler = require('crawler-request');
 
 const mongoose = require('mongoose');
-const provider = new (require('../../utils/modelProvider'));
+const provider = new (require('../../utils/modelProvider'))();
 const mensa = mongoose.model('mensaplans', provider.getMensaplanSchema());
 
 const pdfUrl = "https://www.studentenwerk.uni-heidelberg.de/sites/default/files/download/pdf/sp-mos-mensa-aktuell.pdf";

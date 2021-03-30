@@ -1,7 +1,7 @@
 const iCalParser = require('../../utils/iCalParser');
 
 const mongoose = require('mongoose');
-const provider = new (require('../../utils/modelProvider'));
+const provider = new (require('../../utils/modelProvider'))();
 const lecture = mongoose.model('lectures', provider.getLectureSchema());
 const course = mongoose.model('courses', provider.getCourseSchema());
 

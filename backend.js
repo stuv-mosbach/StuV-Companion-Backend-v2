@@ -30,15 +30,16 @@ process.on("exit", (code) => {
         const basicAuth = require('express-basic-auth');
         const cors = require('cors');
 
+        const dbProvider = require('./utils/dbConfig');
+        const dbAdapater = new dbProvider(config.db.host, config.db.port, config.db.env);
+        const dbUrl = await dbAdapater.getDBUrl();
 
         const agendash = require('agendash');
-        const scheduler = new (require('./scheduler/scheduler'));
+        const scheduler = new (require('./scheduler/scheduler'))(dbUrl);
 
         const apiRoutes = require('./api/routes');
 
 
-        const dbProvider = require('./utils/dbConfig');
-        const dbAdapater = new dbProvider(config.db.host, config.db.port, config.db.env);
 
         // Main routine
 
@@ -82,6 +83,6 @@ process.on("exit", (code) => {
             }
         });
     } catch (e) {
-        console.error(e);        
+        console.error(e);
     }
 })()
