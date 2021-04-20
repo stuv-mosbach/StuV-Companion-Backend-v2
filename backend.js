@@ -68,7 +68,7 @@ process.on("exit", (code) => {
             },
             challenge: true,
             realm: 'stuvbackendadmin',
-        }), agendash(scheduler.get()));
+        }), agendash(scheduler.agent));
 
         app.use('/api', apiRoutes);
 

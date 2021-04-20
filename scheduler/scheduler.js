@@ -85,18 +85,18 @@ module.exports = class Scheduler {
         }
     }
 
-    /**
-     * 
-     * @returns agent
-     */
-    async get() {
-        try {
-            if (!this.initiated) await this.init();
-            return this.agent;
-        } catch (e) {
-            console.error(e);
-        }
-    }
+    // /**
+    //  * 
+    //  * @returns agent
+    //  */
+    // async get() {
+    //     try {
+    //         if (!this.initiated) await this.init();
+    //         return this.agent;
+    //     } catch (e) {
+    //         console.error(e);
+    //     }
+    // }
 
     /**
      * run scheduler
