@@ -14,10 +14,10 @@ module.exports = class Scheduler {
      * @param {String} dbUrl - connection string to db
      */
     constructor(dbUrl) {
-        this.initiated = 0;
+        this.#initiated = 0;
 
-        this.dbUrl = dbUrl
-        this.agent = new agenda({ db: { address: dbUrl } });
+        this.#dbUrl = dbUrl
+        this.#agent = new agenda({ db: { address: this.#dbUrl } });
     }
 
     /**
@@ -26,7 +26,7 @@ module.exports = class Scheduler {
      */
     async init() {
         try {
-            this.agent.define('Update News', async (job) => {
+            this.#agent.define('Update News', async (job) => {
                 try {
                     await newsProvider.run();
                 } catch (e) {
@@ -34,7 +34,7 @@ module.exports = class Scheduler {
                 }
 
             });
-            this.agent.define('Update Courses', async (job) => {
+            this.#agent.define('Update Courses', async (job) => {
                 try {
                     await courseProvider.run();
                 } catch (e) {
@@ -42,7 +42,7 @@ module.exports = class Scheduler {
                 }
             });
 
-            this.agent.define('Update Events', async (job) => {
+            this.#agent.define('Update Events', async (job) => {
                 try {
                     await eventsProvider.run();
                 } catch (e) {
@@ -50,7 +50,7 @@ module.exports = class Scheduler {
                 }
             });
 
-            this.agent.define('Update Mensaplan', async (job) => {
+            this.#agent.define('Update Mensaplan', async (job) => {
                 try {
                     await mensaplanProvider.run();
                 } catch (e) {
@@ -58,7 +58,7 @@ module.exports = class Scheduler {
                 }
             });
 
-            this.agent.define('Update Lectures', async (job) => {
+            this.#agent.define('Update Lectures', async (job) => {
                 try {
                     await lectureProvider.run();
                 } catch (e) {
@@ -66,7 +66,7 @@ module.exports = class Scheduler {
                 }
             })
 
-            this.agent.on('start', job => {
+            this.#agent.on('start', job => {
                 try {
                     console.log('Job %s starting', job.attrs.name);
                 } catch (e) {
@@ -74,40 +74,40 @@ module.exports = class Scheduler {
                 }
             });
 
-            this.agent.on('complete', job => {
+            this.#agent.on('complete', job => {
                 console.log(`Job ${job.attrs.name} finished`);
             });
 
-            this.initiated = 1;
+            this.#initiated = 1;
         } catch (e) {
             console.error(e);
-            this.initiated = 0;
+            this.#initiated = 0;
         }
     }
 
-    // /**
-    //  * 
-    //  * @returns agent
-    //  */
-    // async get() {
-    //     try {
-    //         if (!this.initiated) await this.init();
-    //         return this.agent;
-    //     } catch (e) {
-    //         console.error(e);
-    //     }
-    // }
+    /**
+     * 
+     * @returns agent
+     */
+    async getAgent() {
+        try {
+            if (!this.#initiated) await this.init();
+            return this.#agent;
+        } catch (e) {
+            console.error(e);
+        }
+    }
 
     /**
      * run scheduler
      */
     async run() {
         try {
-            if (!this.initiated) await this.init();
-            await this.agent.start();
-            await this.agent.every('15 minutes', ['Update News', 'Update Events']);
-            await this.agent.every('1 hour', ['Update Lectures']);
-            await this.agent.every('1 day', ['Update Mensaplan', 'Update Courses']);
+            if (!this.#initiated) await this.init();
+            await this.#agent.start();
+            await this.#agent.every('15 minutes', ['Update News', 'Update Events']);
+            await this.#agent.every('1 hour', ['Update Lectures']);
+            await this.#agent.every('1 day', ['Update Mensaplan', 'Update Courses']);
         } catch (e) {
             console.error(e);
         }
