@@ -43,4 +43,45 @@ module.exports = class ICalParser {
 		}
 
 	}
+
+	async main(url) {
+		try {
+			http.get(url, data => {
+				try {
+					let parsed = ical.parse(data);
+					let events = parsed[2];
+
+					let result = [];
+					events.forEach(e => result.push(flattenEvent(e)));
+					return { status: 1, events: result };
+				} catch (e) {
+					console.error(e);
+					return { status: -1 }
+				}
+			})
+		} catch (e) {
+			console.error(e);
+			return { status: -1 }
+		}
+	}
+
+	// 	return new Promise((resolve, reject) => {
+	// 		rp(args).then((txt) => {
+	// 			try {
+	// 				let parsed = ical.parse(txt);
+	// 				let events = parsed[2];
+
+	// 				let result = [];
+	// 				events.forEach(e => result.push(flattenEvent(e)));
+	// 				resolve({ events: result });
+	// 			} catch (e) {
+	// 				console.log(e);
+	// 				reject(e.message);
+	// 			}
+	// 		})
+	// 			.catch((e) => {
+	// 				reject(e);
+	// 			});
+	// 	});
+	// }
 }
