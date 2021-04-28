@@ -1,5 +1,5 @@
 
-const iCalParser = new (require('../../utils/iCalParser'));
+const iCalParser = new (require('../../utils/iCalParser'))();
 
 const mongoose = require('mongoose');
 const provider = new (require('../../utils/modelProvider'))();

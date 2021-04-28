@@ -2,7 +2,7 @@
 
 const mongoose = require('mongoose');
 const provider = new (require('../../utils/modelProvider'));
-const courses = mongoose.model('courses', provider.getCourseSchema());
+const courses = mongoose.model('courses', provider.getCourseSchema())();
 
 // const courseUrl = "http://ics.mosbach.dhbw.de/ics/calendars.list";
 

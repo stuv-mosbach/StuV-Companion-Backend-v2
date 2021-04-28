@@ -35,7 +35,7 @@ process.on("exit", (code) => {
         const dbUrl = await dbAdapater.getDBUrl();
 
         const agendash = require('agendash');
-        const scheduler = new (require('./scheduler/scheduler'))(dbUrl);
+        const scheduler = new (require('./scheduler/scheduler'))(dbUrl, config.staticUrls.news, config.staticUrls.courses, config.staticUrls.events, config.staticUrls.mensa);
 
         const apiRoutes = require('./api/routes');
 

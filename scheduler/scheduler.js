@@ -11,20 +11,23 @@ module.exports = class Scheduler {
     /**
      * 
      * @param {String} dbUrl - connection string to db
+     * @param {String} newsUrl 
+     * @param {String} courseUrl 
+     * @param {String} eventsUrl 
+     * @param {String} mensaUrl 
      */
-    constructor(dbUrl, newsUrl, courseUrl, eventsUrl, mensaUrl, lectureUrl) {
+    constructor(dbUrl, newsUrl, courseUrl, eventsUrl, mensaUrl) {
         this.initiated = 0;
 
         this.newsUrl = newsUrl;
         this.courseUrl = courseUrl;
         this.eventsUrl = eventsUrl;
         this.mensaUrl = mensaUrl;
-        this.lectureUrl = lectureUrl;
         this.dbUrl = dbUrl
         this.agent = new agenda({ db: { address: this.dbUrl } });
 
-        this.courseProvider = new (require('../datacollection/courses/coursesProvider')(this.courseUrl));
-        this.eventsProvider = new (require('../datacollection/events/eventsProvider')(this.eventsUrl));
+        this.courseProvider = new (require('../datacollection/courses/coursesProvider'))(this.courseUrl);
+        this.eventsProvider = new (require('../datacollection/events/eventsProvider'))(this.eventsUrl);
     }
 
     /**
