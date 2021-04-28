@@ -13,11 +13,11 @@ module.exports = class CoursesProvider {
      * @param {String} url - http url to courses
      */
     constructor(url) {
-        this.#courseUrl = url;
+        this.courseUrl = url;
 
     }
 
-    async #formatAndCleanUp(data) {
+    async formatAndCleanUp(data) {
         try {
             const result = [];
             const year = (new Date()).getFullYear().toString().substr(2);
@@ -42,7 +42,7 @@ module.exports = class CoursesProvider {
      * @param {Object} element 
      * @returns {Object} {status: {Number}} - e.g. { status: -1 }
      */
-    async #updateDatabase(element) {
+    async updateDatabase(element) {
         try {
             const data = { course: element["course"], url: element["url"] };
             const options = { upsert: true, new: true, useFindAndModify: false };
@@ -67,12 +67,12 @@ module.exports = class CoursesProvider {
      * @param {String} url - http url for courses
      * @returns {Object} {status: {Number}} - e.g. { status: -1 }
      */
-    async #updateCourses(url) {
+    async updateCourses(url) {
         try {
             http.get(url, data => {
-                const coursesArray = this.#formatAndCleanUp(data.data);
+                const coursesArray = this.formatAndCleanUp(data.data);
                 coursesArray.forEach(element => {
-                    this.#updateDatabase(element);
+                    this.updateDatabase(element);
                 });
                 return { status: 1 };
             })
@@ -88,7 +88,7 @@ module.exports = class CoursesProvider {
      */
     async run() {
         try {
-            return await this.#updateCourses(this.#courseUrl);
+            return await this.updateCourses(this.courseUrl);
         } catch (e) {
             console.error(e);
             return { status: -1 }
