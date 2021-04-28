@@ -1,9 +1,8 @@
 
 const iCalParser = new (require('../../utils/iCalParser'))();
 
-const mongoose = require('mongoose');
 const provider = new (require('../../utils/modelProvider'))();
-const event = mongoose.model('events', provider.getEventSchema());
+const event = provider.getEventSchema();
 
 // const calendarUrl = "https://calendar.google.com/calendar/ical/asta.dhbw.de_08mkcuqcrppq8cg8vlutdsgpjg%40group.calendar.google.com/public/basic.ics";
 
