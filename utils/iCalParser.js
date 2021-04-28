@@ -1,6 +1,7 @@
 "use strict";
 
 const http = require('http');
+const https = require('https');
 const ical = require('ical.js');
 
 module.exports = class ICalParser {
@@ -46,7 +47,9 @@ module.exports = class ICalParser {
 
 	async main(url) {
 		try {
-			http.get(url, data => {
+			const protocol = (url.substring(0,5) === "https") ? https : http;			
+
+			protocol.get(url, data => {
 				try {
 					let parsed = ical.parse(data);
 					let events = parsed[2];

@@ -57,7 +57,7 @@ module.exports = class LectureProvider {
     async updateLectures() {
         try {
             let courses = [];
-            await course.find({}, 'course url', function (err, res) {
+            await course.find({}, 'http://ics.mosbach.dhbw.de/ics/calendars.list', function (err, res) {
                 if (err) {
                     throw new Error(err);
                 } else {
