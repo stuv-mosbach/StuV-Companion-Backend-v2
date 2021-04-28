@@ -5,37 +5,47 @@ const mongoose = require('mongoose');
 const provider = new (require('../../utils/modelProvider'))();
 const event = mongoose.model('events', provider.getEventSchema());
 
-const calendarUrl = "https://calendar.google.com/calendar/ical/asta.dhbw.de_08mkcuqcrppq8cg8vlutdsgpjg%40group.calendar.google.com/public/basic.ics";
+// const calendarUrl = "https://calendar.google.com/calendar/ical/asta.dhbw.de_08mkcuqcrppq8cg8vlutdsgpjg%40group.calendar.google.com/public/basic.ics";
 
-exports.run = () => {
-    return new Promise((resolve, reject) => {
-        updateEvents(calendarUrl, resolve, reject);
-    })
-}
+module.exports = class EventsProvider {
+    constructor(url) {
+        this.calendarUrl = url;
+    }
 
-const updateEvents = (url, resolve, reject) => {
-    iCalParser.main(calendarUrl)
-        .then((data) => {
-            data.events.forEach(element => {
-                updateDatabase(element, reject);
-            });
-            resolve();
-        })
-        .catch((err) => {
-            reject(err);
-        })
-}
+    /**
+     * 
+     * @param {Object} element 
+     * @returns {Object} {status: {Number}} - e.g. { status: -1 }
+     */
+    async updateDatabase(element) {
+        try {
+            const data = { dtstart: element["dtstart"], dtend: element["dtend"], dtstamp: element["dtstamp"], uid: element["uid"], created: element["created"], description: element["description"], 'last-modified': element["last-modified"], location: element["location"], sequence: element["sequence"], status: element["status"], summary: element["summary"], transp: element["transp"] };
+            const options = { upsert: true, new: true, useFindAndModify: false };
+            const query = { uid: element["uid"] };
 
-const updateDatabase = (element, reject) => {
-    const data = { dtstart: element["dtstart"], dtend: element["dtend"], dtstamp: element["dtstamp"], uid: element["uid"], created: element["created"], description: element["description"], 'last-modified': element["last-modified"], location: element["location"], sequence: element["sequence"], status: element["status"], summary: element["summary"], transp: element["transp"] };
-    const options = { upsert: true, new: true, useFindAndModify: false };
-    const query = { uid: element["uid"] };
+            await event.findOneAndUpdate(query, data, options);
+            return { status: 1 };
+        } catch (e) {
+            console.error(e);
+            return { status: -1 };
+        }
+    }
 
-    event.findOneAndUpdate(query, data, options)
-        .then((doc) => {
+    /**
+     * 
+     * @returns {Object} {status: {Number}} - e.g. { status: -1 }
+     */
+    async updateEvents() {
+        try {
+            const data = await iCalParser.main(this.calendarUrl)
+            for (const element of data) {
+                await this.updateDatabasetabase(element);
+            }
+            return { status: 1 };
+        } catch (e) {
+            console.error(e);
+            return { status: -1 };
+        }
 
-        })
-        .catch((err) => {
-            reject(err);
-        });
+    }
 }

@@ -1,8 +1,8 @@
 const agenda = require('agenda');
 // const dbProvider = new (require('../utils/dbConfig'))();
 const newsProvider = require('../datacollection/news/newsProvider');
-const courseProvider = require('../datacollection/courses/coursesProvider');
-const eventsProvider = require('../datacollection/events/eventsProvider');
+// const courseProvider = require('../datacollection/courses/coursesProvider');
+// const eventsProvider = new(require('../datacollection/events/eventsProvider'));
 const mensaplanProvider = require('../datacollection/mensaplan/mensaplanProvider');
 const lectureProvider = require('../datacollection/lectures/lecturesProvider');
 // const dbString = await dbProvider.getDBUrl() + '/agenda';
@@ -12,11 +12,19 @@ module.exports = class Scheduler {
      * 
      * @param {String} dbUrl - connection string to db
      */
-    constructor(dbUrl) {
+    constructor(dbUrl, newsUrl, courseUrl, eventsUrl, mensaUrl, lectureUrl) {
         this.initiated = 0;
 
+        this.newsUrl = newsUrl;
+        this.courseUrl = courseUrl;
+        this.eventsUrl = eventsUrl;
+        this.mensaUrl = mensaUrl;
+        this.lectureUrl = lectureUrl;
         this.dbUrl = dbUrl
         this.agent = new agenda({ db: { address: this.dbUrl } });
+
+        this.courseProvider = new (require('../datacollection/courses/coursesProvider')(this.courseUrl));
+        this.eventsProvider = new (require('../datacollection/events/eventsProvider')(this.eventsUrl));
     }
 
     /**
@@ -35,7 +43,7 @@ module.exports = class Scheduler {
             });
             this.agent.define('Update Courses', async (job) => {
                 try {
-                    await courseProvider.run();
+                    await this.courseProvider.run();
                 } catch (e) {
                     console.error(e);
                 }
@@ -43,7 +51,7 @@ module.exports = class Scheduler {
 
             this.agent.define('Update Events', async (job) => {
                 try {
-                    await eventsProvider.run();
+                    await this.eventsProvider.updateEvents();
                 } catch (e) {
                     console.error(e);
                 }
