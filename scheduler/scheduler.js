@@ -3,8 +3,8 @@ const agenda = require('agenda');
 const newsProvider = require('../datacollection/news/newsProvider');
 // const courseProvider = require('../datacollection/courses/coursesProvider');
 // const eventsProvider = new(require('../datacollection/events/eventsProvider'));
-const mensaplanProvider = require('../datacollection/mensaplan/mensaplanProvider');
-const lectureProvider = require('../datacollection/lectures/lecturesProvider');
+// const mensaplanProvider = require('../datacollection/mensaplan/mensaplanProvider');
+// const lectureProvider = require('../datacollection/lectures/lecturesProvider');
 // const dbString = await dbProvider.getDBUrl() + '/agenda';
 
 module.exports = class Scheduler {
@@ -28,6 +28,8 @@ module.exports = class Scheduler {
 
         this.courseProvider = new (require('../datacollection/courses/coursesProvider'))(this.courseUrl);
         this.eventsProvider = new (require('../datacollection/events/eventsProvider'))(this.eventsUrl);
+        this.lectureProvider = new (require('../datacollection/lectures/lecturesProvider'))();
+        this.mensaplanProvider = new (require('../datacollection/mensaplan/mensaplanProvider'))(this.mensaUrl);
     }
 
     /**
@@ -62,7 +64,7 @@ module.exports = class Scheduler {
 
             this.agent.define('Update Mensaplan', async (job) => {
                 try {
-                    await mensaplanProvider.run();
+                    await this.mensaplanProvider.updateMensaplan();
                 } catch (e) {
                     console.error(e);
                 }
@@ -70,7 +72,7 @@ module.exports = class Scheduler {
 
             this.agent.define('Update Lectures', async (job) => {
                 try {
-                    await lectureProvider.run();
+                    await this.lectureProvider.updateLectures();
                 } catch (e) {
                     console.error(e);
                 }

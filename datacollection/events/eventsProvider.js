@@ -36,8 +36,8 @@ module.exports = class EventsProvider {
      */
     async updateEvents() {
         try {
-            const data = await iCalParser.main(this.calendarUrl)
-            for (const element of data) {
+            const res = await iCalParser.main(this.calendarUrl)
+            for (const element of res.events) {
                 await this.updateDatabasetabase(element);
             }
             return { status: 1 };
