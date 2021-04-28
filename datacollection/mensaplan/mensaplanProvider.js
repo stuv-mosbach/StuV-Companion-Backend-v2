@@ -8,6 +8,11 @@ const mensa = provider.getMensaplanSchema();
 // const pdfUrl = "https://www.studentenwerk.uni-heidelberg.de/sites/default/files/download/pdf/sp-mos-mensa-aktuell.pdf";
 
 module.exports = class MensaPlanProvider {
+    
+    /**
+     * 
+     * @param {*} url 
+     */
     constructor(url) {
         this.pdfUrl = url;
 

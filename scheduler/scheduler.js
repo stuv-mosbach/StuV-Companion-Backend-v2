@@ -1,6 +1,6 @@
 const agenda = require('agenda');
 // const dbProvider = new (require('../utils/dbConfig'))();
-const newsProvider = require('../datacollection/news/newsProvider');
+// const newsProvider = require('../datacollection/news/newsProvider');
 // const courseProvider = require('../datacollection/courses/coursesProvider');
 // const eventsProvider = new(require('../datacollection/events/eventsProvider'));
 // const mensaplanProvider = require('../datacollection/mensaplan/mensaplanProvider');
@@ -30,6 +30,7 @@ module.exports = class Scheduler {
         this.eventsProvider = new (require('../datacollection/events/eventsProvider'))(this.eventsUrl);
         this.lectureProvider = new (require('../datacollection/lectures/lecturesProvider'))();
         this.mensaplanProvider = new (require('../datacollection/mensaplan/mensaplanProvider'))(this.mensaUrl);
+        this.newsProvider = new (require('../datacollection/news/newsProvider'))(this.newsUrl);
     }
 
     /**
@@ -40,7 +41,7 @@ module.exports = class Scheduler {
         try {
             this.agent.define('Update News', async (job) => {
                 try {
-                    await newsProvider.run();
+                    await this.newsProvider.loadFeed();
                 } catch (e) {
                     console.error(e);
                 }
