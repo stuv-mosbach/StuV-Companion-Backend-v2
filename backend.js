@@ -29,9 +29,8 @@ process.on("exit", (code) => {
         const express = require('express');
         const basicAuth = require('express-basic-auth');
         const cors = require('cors');
-
-        const dbProvider = require('./utils/dbConfig');
-        const dbAdapater = new dbProvider(config.db.host, config.db.port, config.db.env);
+                
+        const dbAdapater = new (require('./utils/dbConfig'))(config.db.host, config.db.port, config.db.env);
         const dbUrl = await dbAdapater.getDBUrl();
 
         const agendash = require('agendash');
