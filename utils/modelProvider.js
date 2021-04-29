@@ -1,7 +1,6 @@
 "use strict";
 
 const mongoose = require('mongoose');
-mongoose.set('useUnifiedTopology', true);
 const Schema = mongoose.Schema;
 
 

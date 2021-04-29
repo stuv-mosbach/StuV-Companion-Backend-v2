@@ -19,12 +19,17 @@ module.exports = class DatabaseAdapter {
             const connString = this.url.concat("/", this.env);
             if (!connString || !this.url || !this.env) throw new Error("Parsing of connection String failed!");
 
-            mongoose.set('useNewUrlParser', true);
-            mongoose.set('useUnifiedTopology', true);
-            mongoose.set('useCreateIndex', true);
-            mongoose.set('useFindAndModify', false);
+            // mongoose.set('useNewUrlParser', true);
+            // mongoose.set('useUnifiedTopology', true);
+            // mongoose.set('useCreateIndex', true);
+            // mongoose.set('useFindAndModify', false);
 
-            await mongoose.connect(connString);
+            await mongoose.connect(connString, {
+                useNewUrlParser: true,
+                useUnifiedTopology: true,
+                useFindAndModify: false,
+                useCreateIndex: true
+            });
             return { status: 1 };
         } catch (e) {
             console.error(e);

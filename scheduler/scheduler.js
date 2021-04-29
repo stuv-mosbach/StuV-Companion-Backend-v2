@@ -1,4 +1,5 @@
-const agenda = require('agenda');
+"use strict"
+const agenda = require('agenda').default;
 // const dbProvider = new (require('../utils/dbConfig'))();
 // const newsProvider = require('../datacollection/news/newsProvider');
 // const courseProvider = require('../datacollection/courses/coursesProvider');
