@@ -49,7 +49,7 @@ module.exports = class ICalParser {
 		try {
 			const protocol = (url.substring(0,5) === "https") ? https : http;			
 
-			return protocol.get(url, data => {
+			protocol.get(url, data => {
 				try {
 					let parsed = ical.parse(data);
 					let events = parsed[2];

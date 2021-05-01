@@ -31,10 +31,10 @@ process.on("exit", (code) => {
         const cors = require('cors');
                 
         const dbAdapater = new (require('./utils/dbConfig'))(config.db.host, config.db.port, config.db.env);
-        const dbUrl = await dbAdapater.getDBUrl();
+       
 
         const agendash = require('agendash');
-        const scheduler = new (require('./scheduler/scheduler'))(dbUrl, config.staticUrls.news, config.staticUrls.courses, config.staticUrls.events, config.staticUrls.mensa);
+        const scheduler = new (require('./scheduler/scheduler'))(await dbAdapater.connect(), config.staticUrls.news, config.staticUrls.courses, config.staticUrls.events, config.staticUrls.mensa);
 
         const apiRoutes = require('./api/routes');
 
@@ -76,7 +76,7 @@ process.on("exit", (code) => {
          * */
         app.listen(config.webserver.port, async () => {
             try {
-                dbAdapater.connect();
+                // dbAdapater.connect();
             } catch (e) {
                 console.error(e);
             }

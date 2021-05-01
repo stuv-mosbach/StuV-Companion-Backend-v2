@@ -24,13 +24,13 @@ module.exports = class DatabaseAdapter {
             // mongoose.set('useCreateIndex', true);
             // mongoose.set('useFindAndModify', false);
 
-            await mongoose.connect(connString, {
+            await mongoose.createConnection(connString, {
                 useNewUrlParser: true,
                 useUnifiedTopology: true,
                 useFindAndModify: false,
                 useCreateIndex: true
             });
-            return { status: 1 };
+            return { status: 1, mongo: mongoose };
         } catch (e) {
             console.error(e);
             return { status: -1 }

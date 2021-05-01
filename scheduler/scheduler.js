@@ -17,15 +17,23 @@ module.exports = class Scheduler {
      * @param {String} eventsUrl 
      * @param {String} mensaUrl 
      */
-    constructor(dbUrl, newsUrl, courseUrl, eventsUrl, mensaUrl) {
+    constructor(mongoConnection, newsUrl, courseUrl, eventsUrl, mensaUrl) {
         this.initiated = 0;
 
         this.newsUrl = newsUrl;
         this.courseUrl = courseUrl;
         this.eventsUrl = eventsUrl;
         this.mensaUrl = mensaUrl;
-        this.dbUrl = dbUrl
-        this.agent = new agenda({ db: { address: this.dbUrl } });
+        this.mongoConnection = mongoConnection;
+        this.agent = new agenda({ mongo: this.mongoConnection.mongo.connection });
+        //     {
+        //     db: { address: this.dbUrl }, options: {
+        //         useNewUrlParser: true,
+        //         useUnifiedTopology: true,
+        //         useFindAndModify: false,
+        //         useCreateIndex: true
+        //     }
+        // });
 
         this.courseProvider = new (require('../datacollection/courses/coursesProvider'))(this.courseUrl);
         this.eventsProvider = new (require('../datacollection/events/eventsProvider'))(this.eventsUrl);
