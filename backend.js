@@ -31,10 +31,10 @@ process.on("exit", (code) => {
         const cors = require('cors');
                 
         const dbAdapater = new (require('./utils/dbConfig'))(config.db.host, config.db.port, config.db.env);
-       
+        const mongoConnection = await dbAdapater.connect();
 
         const agendash = require('agendash');
-        const scheduler = new (require('./scheduler/scheduler'))(await dbAdapater.connect(), config.staticUrls.news, config.staticUrls.courses, config.staticUrls.events, config.staticUrls.mensa);
+        const scheduler = new (require('./scheduler/scheduler'))(mongoConnection, config.staticUrls.news, config.staticUrls.courses, config.staticUrls.events, config.staticUrls.mensa);
 
         const apiRoutes = require('./api/routes');
 

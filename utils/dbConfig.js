@@ -30,7 +30,7 @@ module.exports = class DatabaseAdapter {
                 useFindAndModify: false,
                 useCreateIndex: true
             });
-            return { status: 1, mongo: mongoose };
+            return { status: 1, mongoose };
         } catch (e) {
             console.error(e);
             return { status: -1 }

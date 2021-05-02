@@ -25,7 +25,7 @@ module.exports = class Scheduler {
         this.eventsUrl = eventsUrl;
         this.mensaUrl = mensaUrl;
         this.mongoConnection = mongoConnection;
-        this.agent = new agenda({ mongo: this.mongoConnection.mongo.connection });
+        this.agent = new agenda({ mongo: this.mongoConnection.mongoose.connection.db });
         //     {
         //     db: { address: this.dbUrl }, options: {
         //         useNewUrlParser: true,
