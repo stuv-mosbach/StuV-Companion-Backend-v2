@@ -1,5 +1,9 @@
 "use strict";
 
+const path = require('path');
+const config = require(path.resolve(process.cwd() + '/config.json'));
+const Winston = new (require("./utils/Winston"))(config.log);
+
 process.on("uncaughtExceptionMonitor", (err, origin) => {
     console.error(`child with pid=${process.pid} crashed with ${err} at`, origin);
     process.exit(-1);
@@ -22,14 +26,10 @@ process.on("exit", (code) => {
 (async function () {
     try {
         require('dotenv').config();
-
-        const path = require('path');
-        const config = require(path.resolve(process.cwd() + '/config.json'));
-
         const express = require('express');
         const basicAuth = require('express-basic-auth');
         const cors = require('cors');
-                
+
         const dbAdapater = new (require('./utils/dbConfig'))(config.db.host, config.db.port, config.db.env);
         const mongoConnection = await dbAdapater.connect();
 
@@ -77,6 +77,7 @@ process.on("exit", (code) => {
         app.listen(config.webserver.port, async () => {
             try {
                 // dbAdapater.connect();
+                Winston.log("Running")
             } catch (e) {
                 console.error(e);
             }

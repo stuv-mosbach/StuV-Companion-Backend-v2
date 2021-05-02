@@ -12,5 +12,10 @@
         "news": "https://stuv-mosbach.de/feed/",
         "courses": "http://ics.mosbach.dhbw.de/ics/calendars.list",
         "events": "https://calendar.google.com/calendar/ical/asta.dhbw.de_08mkcuqcrppq8cg8vlutdsgpjg%40group.calendar.google.com/public/basic.ics"
+    }, 
+    "log":{
+        "logLevel": "info",
+        "logFileMaxSize": "500m",
+        "logFileStorageTime": "7d"
     }
 }
