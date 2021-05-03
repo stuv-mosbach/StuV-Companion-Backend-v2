@@ -124,10 +124,11 @@ module.exports = class Scheduler {
     async run() {
         try {
             if (!this.initiated) await this.init();
-            await this.agent.start();
-            await this.agent.every('15 minutes', ['Update News', 'Update Events']);
-            await this.agent.every('1 hour', ['Update Lectures']);
-            await this.agent.every('1 day', ['Update Mensaplan', 'Update Courses']);
+            // await this.agent.start();
+            this.agent.every('15 minutes', ['Update News', 'Update Events']);
+            this.agent.every('1 hour', ['Update Lectures']);
+            this.agent.every('1 day', ['Update Mensaplan', 'Update Courses']);
+            Winston.info("Scheduler running");
         } catch (e) {
             Winston.error(e);
         }

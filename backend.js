@@ -50,7 +50,7 @@ process.on("exit", (code) => {
         /**
          * start scheduler
          */
-        scheduler.run();
+        await scheduler.run();
 
         /**
          * start routes
