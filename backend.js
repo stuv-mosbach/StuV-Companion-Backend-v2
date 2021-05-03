@@ -2,25 +2,25 @@
 
 const path = require('path');
 const config = require(path.resolve(process.cwd() + '/config.json'));
-const Winston = new (require("./utils/Winston"))(config.log);
+const Winston = new (require("./utils/Winston"))(config.log).logger;
 
 process.on("uncaughtExceptionMonitor", (err, origin) => {
-    console.error(`child with pid=${process.pid} crashed with ${err} at`, origin);
+    Winston.error(`child with pid=${process.pid} crashed with ${err} at`, origin);
     process.exit(-1);
 });
 
 process.on("unhandledRejection", (e, origin) => {
-    console.error(`Unhandled rejection in child with pid=${process.pid}. Crashed with ${e} at`, origin);
+    Winston.error(`Unhandled rejection in child with pid=${process.pid}. Crashed with ${e} at`, origin);
     process.exit(-1);
 });
 
 process.on("uncaughtException", (e) => {
-    console.error(`Uncaught exception in child with pid=${process.pid}: ${e}`);
+    Winston.error(`Uncaught exception in child with pid=${process.pid}: ${e}`);
     process.exit(-1);
 });
 
 process.on("exit", (code) => {
-    console.error(`process exit with code ${code}`);
+    Winston.error(`process exit with code ${code}`);
 });
 
 (async function () {
@@ -75,14 +75,13 @@ process.on("exit", (code) => {
          * init express  
          * */
         app.listen(config.webserver.port, async () => {
-            try {
-                // dbAdapater.connect();
-                Winston.log("Running")
+            try {                
+                Winston.info("Running");
             } catch (e) {
-                console.error(e);
+                Winston.error(e);
             }
         });
     } catch (e) {
-        console.error(e);
+        Winston.error(e);
     }
 })()
