@@ -1,3 +1,8 @@
+"use strict"
+
+const path = require("path");
+const config = require(path.resolve(process.cwd() + '/config.json'));
+const Winston = new (require("../../utils/Winston"))(config.log).logger;
 
 const iCalParser = new (require('../../utils/iCalParser'))();
 

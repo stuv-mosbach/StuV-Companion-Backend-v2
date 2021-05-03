@@ -1,12 +1,10 @@
 "use strict"
+
+const path = require("path");
+const config = require(path.resolve(process.cwd() + '/config.json'));
+const Winston = new (require("../utils/Winston"))(config.log).logger;
+
 const agenda = require('agenda').default;
-// const dbProvider = new (require('../utils/dbConfig'))();
-// const newsProvider = require('../datacollection/news/newsProvider');
-// const courseProvider = require('../datacollection/courses/coursesProvider');
-// const eventsProvider = new(require('../datacollection/events/eventsProvider'));
-// const mensaplanProvider = require('../datacollection/mensaplan/mensaplanProvider');
-// const lectureProvider = require('../datacollection/lectures/lecturesProvider');
-// const dbString = await dbProvider.getDBUrl() + '/agenda';
 
 module.exports = class Scheduler {
     /**
@@ -52,7 +50,7 @@ module.exports = class Scheduler {
                 try {
                     await this.newsProvider.loadFeed();
                 } catch (e) {
-                    console.error(e);
+                    Winston.error(e);
                 }
 
             });
@@ -60,7 +58,7 @@ module.exports = class Scheduler {
                 try {
                     await this.courseProvider.run();
                 } catch (e) {
-                    console.error(e);
+                    Winston.error(e);
                 }
             });
 
@@ -68,7 +66,7 @@ module.exports = class Scheduler {
                 try {
                     await this.eventsProvider.updateEvents();
                 } catch (e) {
-                    console.error(e);
+                    Winston.error(e);
                 }
             });
 
@@ -76,7 +74,7 @@ module.exports = class Scheduler {
                 try {
                     await this.mensaplanProvider.updateMensaplan();
                 } catch (e) {
-                    console.error(e);
+                    Winston.error(e);
                 }
             });
 
@@ -84,25 +82,25 @@ module.exports = class Scheduler {
                 try {
                     await this.lectureProvider.updateLectures();
                 } catch (e) {
-                    console.error(e);
+                    Winston.error(e);
                 }
             })
 
             this.agent.on('start', job => {
                 try {
-                    console.log('Job %s starting', job.attrs.name);
+                    Winston.info(`Job ${job.attrs.name} starting`);
                 } catch (e) {
-                    console.error(e);
+                    Winston.error(e);
                 }
             });
 
             this.agent.on('complete', job => {
-                console.log(`Job ${job.attrs.name} finished`);
+                Winston.info(`Job ${job.attrs.name} finished`);
             });
 
             this.initiated = 1;
         } catch (e) {
-            console.error(e);
+            Winston.error(e);
             this.initiated = 0;
         }
     }
@@ -116,7 +114,7 @@ module.exports = class Scheduler {
             if (!this.initiated) await this.init();
             return this.agent;
         } catch (e) {
-            console.error(e);
+            Winston.error(e);
         }
     }
 
@@ -131,7 +129,7 @@ module.exports = class Scheduler {
             await this.agent.every('1 hour', ['Update Lectures']);
             await this.agent.every('1 day', ['Update Mensaplan', 'Update Courses']);
         } catch (e) {
-            console.error(e);
+            Winston.error(e);
         }
     }
 }

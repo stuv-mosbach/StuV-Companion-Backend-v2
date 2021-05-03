@@ -1,5 +1,9 @@
 "use strict";
 
+const path = require("path");
+const config = require(path.resolve(process.cwd() + '/config.json'));
+const Winston = new (require("./Winston"))(config.log).logger;
+
 const mongoose = require('mongoose');
 
 module.exports = class DatabaseAdapter {
@@ -32,7 +36,7 @@ module.exports = class DatabaseAdapter {
             });
             return { status: 1, mongoose };
         } catch (e) {
-            console.error(e);
+            Winston.error(e);
             return { status: -1 }
         }
     }
@@ -45,7 +49,7 @@ module.exports = class DatabaseAdapter {
         try {
             return this.url;
         } catch (e) {
-            console.error(e);
+            Winston.error(e);
         }
     }
 
@@ -57,7 +61,7 @@ module.exports = class DatabaseAdapter {
         try {
             return this.env;
         } catch (e) {
-            console.error(e);
+            Winston.error(e);
         }
     }
 }

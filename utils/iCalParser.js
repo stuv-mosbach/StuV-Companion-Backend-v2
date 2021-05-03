@@ -1,5 +1,8 @@
 "use strict";
 
+const path = require("path");
+const config = require(path.resolve(process.cwd() + '/config.json'));
+const Winston = new (require("./Winston"))(config.log).logger;
 const http = require('http');
 const https = require('https');
 const ical = require('ical.js');
@@ -18,6 +21,11 @@ module.exports = class ICalParser {
 
 	}
 
+	/**
+	 * 
+	 * @param {String} url 
+	 * @returns {Object}
+	 */
 	async parse(url) {
 		try {
 			try {
@@ -31,15 +39,15 @@ module.exports = class ICalParser {
 						events.forEach(e => result.push(this.flattenEvent(e)));
 						resolve({ events: result });
 					} catch (e) {
-						console.error(e);
+						Winston.error(e);
 					}
 				})
 			} catch (e) {
-				console.error(e);
+				Winston.error(e);
 				return { status: -1 }
 			}
 		} catch (e) {
-			console.error(e);
+			Winston.error(e);
 			return { status: -1 }
 		}
 
@@ -47,7 +55,7 @@ module.exports = class ICalParser {
 
 	async main(url) {
 		try {
-			const protocol = (url.substring(0,5) === "https") ? https : http;			
+			const protocol = (url.substring(0, 5) === "https") ? https : http;
 
 			protocol.get(url, data => {
 				try {
@@ -58,33 +66,13 @@ module.exports = class ICalParser {
 					events.forEach(e => result.push(flattenEvent(e)));
 					return { status: 1, events: result };
 				} catch (e) {
-					console.error(e);
+					Winston.error(e);
 					return { status: -1 }
 				}
 			})
 		} catch (e) {
-			console.error(e);
+			Winston.error(e);
 			return { status: -1 }
 		}
 	}
-
-	// 	return new Promise((resolve, reject) => {
-	// 		rp(args).then((txt) => {
-	// 			try {
-	// 				let parsed = ical.parse(txt);
-	// 				let events = parsed[2];
-
-	// 				let result = [];
-	// 				events.forEach(e => result.push(flattenEvent(e)));
-	// 				resolve({ events: result });
-	// 			} catch (e) {
-	// 				console.log(e);
-	// 				reject(e.message);
-	// 			}
-	// 		})
-	// 			.catch((e) => {
-	// 				reject(e);
-	// 			});
-	// 	});
-	// }
 }

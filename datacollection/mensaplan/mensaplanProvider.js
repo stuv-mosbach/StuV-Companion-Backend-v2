@@ -1,3 +1,9 @@
+"use strict"
+
+const path = require("path");
+const config = require(path.resolve(process.cwd() + '/config.json'));
+const Winston = new (require("../../utils/Winston"))(config.log).logger;
+
 const lineSplitter = require('split-lines');
 const crawler = require('crawler-request');
 
@@ -34,7 +40,7 @@ module.exports = class MensaPlanProvider {
                         throw new Error(err);
                     });
             } catch (e) {
-                console.error(e);
+                Winston.error(e);
                 return { status: -1 };
             }
 
@@ -95,7 +101,7 @@ module.exports = class MensaPlanProvider {
                 };
                 return updateDatabase(object);
             } catch (e) {
-                console.error(e);
+                Winston.error(e);
                 return { status: -1 };
             }
         }
@@ -111,7 +117,7 @@ module.exports = class MensaPlanProvider {
                     reject(err);
                 })
         } catch (e) {
-            console.error(e);
+            Winston.error(e);
             return { status: -1 };
         }
     }

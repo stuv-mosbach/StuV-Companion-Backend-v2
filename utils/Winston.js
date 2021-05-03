@@ -27,18 +27,14 @@ module.exports = class Winston {
                 }),
                 new winston.transports.Console({
                     format: winston.format.combine(
-                        winston.format.json(),
+                        winston.format.errors({ stack: true }),
                         winston.format.timestamp(),
                         winston.format.prettyPrint(),
                         winston.format.colorize(),
                         winston.format.printf(data => {
-                            return `${data.timestamp} - ${data.level} - ${packagejson.name} : ${data.message}`
+                            return `${new Date().toLocaleString()} - ${data.level} - ${packagejson.name} : ${data.message} ${data.stack ? `- ${data.stack}` : ''}`
                         })
-                    ),
-                    handleExceptions: true,
-                    // prettyPrint: true,
-                    // colorize: true,
-                    // timestamp: new Date().toLocaleString()
+                    )                    
                 })
             ]
         })

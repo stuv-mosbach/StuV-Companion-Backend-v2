@@ -1,3 +1,9 @@
+"use strict"
+
+const path = require("path");
+const config = require(path.resolve(process.cwd() + '/config.json'));
+const Winston = new (require("../../utils/Winston"))(config.log).logger;
+
 const ReaderConstructor = require('rss-parser');
 const Reader = new ReaderConstructor();
 
@@ -31,7 +37,7 @@ module.exports = class {
                         throw new Error(err);
                     });
             } catch (e) {
-                console.error(e);
+                Winston.error(e);
                 return { status: -1 };
             }
         }
@@ -49,7 +55,7 @@ module.exports = class {
             }
             return { status: 1 };
         } catch (e) {
-            console.error(e);
+            Winston.error(e);
             return { status: -1 };
         }
     }

@@ -1,3 +1,9 @@
+"use strict"
+
+const path = require("path");
+const config = require(path.resolve(process.cwd() + '/config.json'));
+const Winston = new (require("../../utils/Winston"))(config.log).logger;
+
 const iCalParser = require('../../utils/iCalParser');
 
 // const mongoose = require('mongoose');
@@ -22,7 +28,7 @@ module.exports = class LectureProvider {
                 lecture.find(query).remove();
                 return { status: -1 };
             } catch (e) {
-                console.error(e);
+                Winston.error(e);
                 return { status: -1 };
             }
         }
@@ -47,7 +53,7 @@ module.exports = class LectureProvider {
                         throw new Error(err);
                     });
             } catch (e) {
-                console.error(e);
+                Winston.error(e);
                 return { status: -1 };
             }
 
@@ -74,7 +80,7 @@ module.exports = class LectureProvider {
                 this.cleanUp(date);
             }
         } catch (e) {
-            console.error(e);
+            Winston.error(e);
             return { status: -1 };
         }
     }

@@ -1,4 +1,8 @@
-// const axios = require('axios');
+"use strict"
+
+const path = require("path");
+const config = require(path.resolve(process.cwd() + '/config.json'));
+const Winston = new (require("../../utils/Winston"))(config.log).logger;
 
 const provider = new (require('../../utils/modelProvider'));
 const courses = provider.getCourseSchema();
@@ -34,7 +38,7 @@ module.exports = class CoursesProvider {
             }
             return result;
         } catch (e) {
-            console.error(e);
+            Winston.error(e);
             return { status: -1 }
         }
     }
@@ -54,7 +58,7 @@ module.exports = class CoursesProvider {
             await courses.findOneAndUpdate(query, data, options);
             return { status: 1 };
         } catch (e) {
-            console.error(e);
+            Winston.error(e);
             return { status: -1 }
         }
     }
@@ -75,12 +79,12 @@ module.exports = class CoursesProvider {
                     }
                     return { status: 1 };
                 } catch (e) {
-                    console.error(e);
+                    Winston.error(e);
                     return { status: -1 }
                 }
             })
         } catch (e) {
-            console.error(e);
+            Winston.error(e);
             return { status: -1 }
         }
     }
@@ -94,7 +98,7 @@ module.exports = class CoursesProvider {
             await this.updateCourses(this.courseUrl);
             return { status: 1 }
         } catch (e) {
-            console.error(e);
+            Winston.error(e);
             return { status: -1 }
         }
     }
