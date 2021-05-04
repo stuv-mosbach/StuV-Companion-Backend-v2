@@ -7,6 +7,7 @@ const Winston = new (require("../utils/Winston"))(config.log).logger;
 const agenda = require('agenda').default;
 
 module.exports = class Scheduler {
+
     /**
      * 
      * @param {String} dbUrl - connection string to db
@@ -15,23 +16,26 @@ module.exports = class Scheduler {
      * @param {String} eventsUrl 
      * @param {String} mensaUrl 
      */
-    constructor(mongoConnection, newsUrl, courseUrl, eventsUrl, mensaUrl) {
+    constructor(dbUrl, newsUrl, courseUrl, eventsUrl, mensaUrl) {
         this.initiated = 0;
 
+        this.dbUrl = dbUrl;
         this.newsUrl = newsUrl;
         this.courseUrl = courseUrl;
         this.eventsUrl = eventsUrl;
         this.mensaUrl = mensaUrl;
-        this.mongoConnection = mongoConnection;
-        this.agent = new agenda({ mongo: this.mongoConnection.mongoose.connection.db });
-        //     {
-        //     db: { address: this.dbUrl }, options: {
-        //         useNewUrlParser: true,
-        //         useUnifiedTopology: true,
-        //         useFindAndModify: false,
-        //         useCreateIndex: true
-        //     }
-        // });
+        // this.mongoConnection = mongoConnection;
+        this.agent = new agenda( //{ mongo: this.mongoConnection.mongoose.connection.db });
+            {
+                db: { address: this.dbUrl + "/agenda" },
+                collection: "agendaJobs",
+                options: {
+                    useNewUrlParser: true,
+                    useUnifiedTopology: true,
+                    useFindAndModify: false,
+                    useCreateIndex: true
+                }
+            });
 
         this.courseProvider = new (require('../datacollection/courses/coursesProvider'))(this.courseUrl);
         this.eventsProvider = new (require('../datacollection/events/eventsProvider'))(this.eventsUrl);
@@ -124,7 +128,7 @@ module.exports = class Scheduler {
     async run() {
         try {
             if (!this.initiated) await this.init();
-            // await this.agent.start();
+            await this.agent.start();
             this.agent.every('15 minutes', ['Update News', 'Update Events']);
             this.agent.every('1 hour', ['Update Lectures']);
             this.agent.every('1 day', ['Update Mensaplan', 'Update Courses']);

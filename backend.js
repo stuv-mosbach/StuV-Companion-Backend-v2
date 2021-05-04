@@ -34,7 +34,7 @@ process.on("exit", (code) => {
         const mongoConnection = await dbAdapater.connect();
 
         const agendash = require('agendash');
-        const scheduler = new (require('./scheduler/scheduler'))(mongoConnection, config.staticUrls.news, config.staticUrls.courses, config.staticUrls.events, config.staticUrls.mensa);
+        const scheduler = new (require('./scheduler/scheduler'))(await dbAdapater.getDBUrl(), config.staticUrls.news, config.staticUrls.courses, config.staticUrls.events, config.staticUrls.mensa);
 
         const apiRoutes = require('./api/routes');
 
