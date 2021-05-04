@@ -129,6 +129,10 @@ module.exports = class Scheduler {
         try {
             if (!this.initiated) await this.init();
             await this.agent.start();
+            this.agent.now(['Update Mensaplan', 'Update Courses']).then(data =>{
+                this.agent.now('Update Lectures');
+            })
+
             this.agent.every('15 minutes', ['Update News', 'Update Events']);
             this.agent.every('1 hour', ['Update Lectures']);
             this.agent.every('1 day', ['Update Mensaplan', 'Update Courses']);

@@ -30,7 +30,7 @@ module.exports = class EventsProvider {
             await event.findOneAndUpdate(query, data, options);
             return { status: 1 };
         } catch (e) {
-            console.error(e);
+            Winston.error(e);
             return { status: -1 };
         }
     }
@@ -48,7 +48,7 @@ module.exports = class EventsProvider {
             }
             return { status: 1 };
         } catch (e) {
-            console.error(e);
+            Winston.error(e);
             return { status: -1 };
         }
 

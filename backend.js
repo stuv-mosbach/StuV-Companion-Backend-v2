@@ -24,7 +24,7 @@ process.on("exit", (code) => {
 });
 
 (async function () {
-    try {
+    try {       
         require('dotenv').config();
         const express = require('express');
         const basicAuth = require('express-basic-auth');
@@ -76,7 +76,7 @@ process.on("exit", (code) => {
          * */
         app.listen(config.webserver.port, async () => {
             try {                
-                Winston.info("Running");
+                Winston.info(`Server up and Running on port: ${config.webserver.port}`);
             } catch (e) {
                 Winston.error(e);
             }
