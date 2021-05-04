@@ -9,14 +9,16 @@ const Reader = new ReaderConstructor();
 
 // const mongoose = require('mongoose');
 const provider = new (require('../../utils/modelProvider'))();
-const news = provider.getNewsSchema();
+const newsSchema = provider.getNewsSchema();
 
 // const newsUrl = 'https://stuv-mosbach.de/feed/';
 
 module.exports = class {
 
-    constructor(url) {
+    constructor(url, dbConnection) {
         this.newsUrl = url;
+        this.dbConnection = dbConnection;
+        this.news = dbConnection.model("news", newsSchema);
 
         /**
          * 
@@ -28,8 +30,8 @@ module.exports = class {
                 const data = { creator: element["creator"], title: element["title"], link: element["link"], pubDate: element["pubDate"], 'content:encoded': element["content:encoded"], 'dc:creator': element["dc:creator"], content: element["content"], contentSnippet: element["contentSnippet"], guid: element["guid"], isoDate: element["isoDate"] };
                 const options = { upsert: true, new: true, useFindAndModify: false };
                 const query = { isoDate: element["isoDate"] };
-                s
-                news.findOneAndUpdate(query, data, options)
+
+                this.news.findOneAndUpdate(query, data, options)
                     .then(() => {
                         return { status: 1 };
                     })

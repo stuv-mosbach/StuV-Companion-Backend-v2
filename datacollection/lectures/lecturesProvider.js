@@ -9,13 +9,16 @@ const iCalParser = require('../../utils/iCalParser');
 // const mongoose = require('mongoose');
 const provider = new (require('../../utils/modelProvider'))();
 const lecture = provider.getLectureSchema();
-const course = provider.getCourseSchema();
+const courseSchema = provider.getCourseSchema();
 
 module.exports = class LectureProvider {
     /**
      * 
      */
-    constructor() {
+    constructor(dbConnection) {
+
+        this.dbConnection = dbConnection;
+        this.course = dbConnection.model('course', courseSchema);
 
         /**
          * 
@@ -63,7 +66,7 @@ module.exports = class LectureProvider {
     async updateLectures() {
         try {
             let courses = [];
-            await course.find({}, 'http://ics.mosbach.dhbw.de/ics/calendars.list', function (err, res) {
+            await this.course.find({}, 'http://ics.mosbach.dhbw.de/ics/calendars.list', function (err, res) {
                 if (err) {
                     throw new Error(err);
                 } else {
@@ -79,6 +82,7 @@ module.exports = class LectureProvider {
                 }
                 this.cleanUp(date);
             }
+            return { status: 1 }
         } catch (e) {
             Winston.error(e);
             return { status: -1 };

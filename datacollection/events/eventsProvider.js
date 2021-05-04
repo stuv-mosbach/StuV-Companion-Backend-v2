@@ -7,13 +7,17 @@ const Winston = new (require("../../utils/Winston"))(config.log).logger;
 const iCalParser = new (require('../../utils/iCalParser'))();
 
 const provider = new (require('../../utils/modelProvider'))();
-const event = provider.getEventSchema();
+const eventSchema = provider.getEventSchema();
 
 // const calendarUrl = "https://calendar.google.com/calendar/ical/asta.dhbw.de_08mkcuqcrppq8cg8vlutdsgpjg%40group.calendar.google.com/public/basic.ics";
 
 module.exports = class EventsProvider {
-    constructor(url) {
+    constructor(url, dbConnection) {
         this.calendarUrl = url;
+        this.dbConnection = dbConnection;
+
+        this.event = this.dbConnection.model("event", eventSchema);
+
     }
 
     /**
@@ -27,7 +31,7 @@ module.exports = class EventsProvider {
             const options = { upsert: true, new: true, useFindAndModify: false };
             const query = { uid: element["uid"] };
 
-            await event.findOneAndUpdate(query, data, options);
+            await this.event.findOneAndUpdate(query, data, options);
             return { status: 1 };
         } catch (e) {
             Winston.error(e);

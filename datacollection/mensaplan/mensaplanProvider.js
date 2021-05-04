@@ -9,7 +9,7 @@ const crawler = require('crawler-request');
 
 // const mongoose = require('mongoose');
 const provider = new (require('../../utils/modelProvider'))();
-const mensa = provider.getMensaplanSchema();
+const mensaSchema = provider.getMensaplanSchema();
 
 // const pdfUrl = "https://www.studentenwerk.uni-heidelberg.de/sites/default/files/download/pdf/sp-mos-mensa-aktuell.pdf";
 
@@ -19,9 +19,11 @@ module.exports = class MensaPlanProvider {
      * 
      * @param {*} url 
      */
-    constructor(url) {
+    constructor(url, dbConnection) {
         this.pdfUrl = url;
+        this.dbConnection = dbConnection;
 
+        this.mensa = dbConnection.model("mensa", mensaSchema);
         /**
          * 
          * @param {*} element 
@@ -32,7 +34,7 @@ module.exports = class MensaPlanProvider {
                 const data = { validUntil: element["validUntil"], Montag: element["Montag"], Dienstag: element["Dienstag"], Mittwoch: element["Mittwoch"], Donnerstag: element["Donnerstag"], Freitag: element["Freitag"] };
                 const options = { upsert: true, new: true, useFindAndModify: false };
                 const query = { validUntil: element["validUntil"] };
-                mensa.findOneAndUpdate(query, data, options)
+                this.mensa.findOneAndUpdate(query, data, options)
                     .then((doc) => {
                         return { status: 1 };
                     })
