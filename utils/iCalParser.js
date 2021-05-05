@@ -63,7 +63,8 @@ module.exports = class ICalParser {
 		try {
 			const result = [];
 			const get = await axios.get(url);
-			const res = ical.parse(get);
+			if (!get.data) throw new Error("No data to parse!");
+			const res = ical.parse(get.data);
 			for (const element of res[2]) {
 				result.push(await this.flattenEvent(element));
 			}

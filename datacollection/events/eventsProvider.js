@@ -48,7 +48,7 @@ module.exports = class EventsProvider {
             const res = await iCalParser.main(this.calendarUrl);
             if(res.status <= 0) throw new Error(`Can't parse events`);
             for (const element of res.events) {
-                await this.updateDatabasetabase(element);
+                await this.updateDatabase(element);
             }
             return { status: 1 };
         } catch (e) {
