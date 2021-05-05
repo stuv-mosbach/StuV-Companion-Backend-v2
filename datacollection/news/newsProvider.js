@@ -52,8 +52,8 @@ module.exports = class {
     async loadFeed() {
         try {
             const newsData = await Reader.parseURL(this.newsUrl);
-            for (const element of newsData) {
-                updateDBEntrys(element);
+            for (const element of newsData.items) {
+                this.updateDBEntrys(element);
             }
             return { status: 1 };
         } catch (e) {

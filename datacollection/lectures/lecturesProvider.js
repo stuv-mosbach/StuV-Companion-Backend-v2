@@ -3,8 +3,9 @@
 const path = require("path");
 const config = require(path.resolve(process.cwd() + '/config.json'));
 const Winston = new (require("../../utils/Winston"))(config.log).logger;
+const axios = require("axios");
 
-const iCalParser = require('../../utils/iCalParser');
+const iCalParser = new(require('../../utils/iCalParser'))();
 
 // const mongoose = require('mongoose');
 const provider = new (require('../../utils/modelProvider'))();
@@ -64,19 +65,20 @@ module.exports = class LectureProvider {
     }
 
     async updateLectures() {
-        try {
-            let courses = [];
-            await this.course.find({}, 'http://ics.mosbach.dhbw.de/ics/calendars.list', function (err, res) {
-                if (err) {
-                    throw new Error(err);
-                } else {
-                    courses = res;
-                }
-            })
+        try {            
+            const res = await axios.get("");
+
+            // await this.course.find({}, 'http://ics.mosbach.dhbw.de/ics/calendars.list', function (err, res) {
+            //     if (err) {
+            //         throw new Error(err);
+            //     } else {
+            //         courses = res;
+            //     }
+            // })
             const date = (new Date()).toString();
-            for (const element of courses) {
-                const res = await iCalParser.main(element.url);
-                for (const item of res.events) {
+            for (const element of res) {
+                const resElem = await iCalParser.main(element.url);
+                for (const item of resElem.events) {
                     item.course = element.course;
                     this.updateDatabase(item, date);
                 }

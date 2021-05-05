@@ -5,8 +5,8 @@ const config = require(path.resolve(process.cwd() + '/config.json'));
 const Winston = new (require("../../utils/Winston"))(config.log).logger;
 
 const provider = new (require('../../utils/modelProvider'));
-const courses = provider.getCourseSchema();
-
+const coursesSchema = provider.getCourseSchema();
+const axios = require("axios");
 // const courseUrl = "http://ics.mosbach.dhbw.de/ics/calendars.list";
 
 module.exports = class CoursesProvider {
@@ -15,9 +15,11 @@ module.exports = class CoursesProvider {
      * 
      * @param {String} url - http url to courses
      */
-    constructor(url) {
+    constructor(url, dbConnection) {
         this.courseUrl = url;
+        this.dbConnection = dbConnection;
 
+        this.courses = this.dbConnection.model("courses", coursesSchema);
     }
 
     /**
@@ -55,7 +57,7 @@ module.exports = class CoursesProvider {
             const options = { upsert: true, new: true, useFindAndModify: false };
             const query = { course: element["course"] };
 
-            await courses.findOneAndUpdate(query, data, options);
+            await this.courses.findOneAndUpdate(query, data, options);
             return { status: 1 };
         } catch (e) {
             Winston.error(e);
@@ -71,18 +73,12 @@ module.exports = class CoursesProvider {
      */
     async updateCourses(url) {
         try {
-            http.get(url, async (data) => {
-                try {
-                    const coursesArray = this.formatAndCleanUp(data.data);
-                    for (const element of coursesArray) {
-                        await this.updateDatabase(element);
-                    }
-                    return { status: 1 };
-                } catch (e) {
-                    Winston.error(e);
-                    return { status: -1 }
-                }
-            })
+            const res = await axios.get(url);
+            const coursesArray = await this.formatAndCleanUp(res.data);
+            for (const element of coursesArray) {
+                await this.updateDatabase(element);
+            }
+            return { status: 1 };
         } catch (e) {
             Winston.error(e);
             return { status: -1 }

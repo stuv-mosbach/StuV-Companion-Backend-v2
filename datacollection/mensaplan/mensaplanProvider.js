@@ -14,7 +14,7 @@ const mensaSchema = provider.getMensaplanSchema();
 // const pdfUrl = "https://www.studentenwerk.uni-heidelberg.de/sites/default/files/download/pdf/sp-mos-mensa-aktuell.pdf";
 
 module.exports = class MensaPlanProvider {
-    
+
     /**
      * 
      * @param {*} url 
@@ -101,7 +101,7 @@ module.exports = class MensaPlanProvider {
                     Donnerstag: thursday,
                     Freitag: friday
                 };
-                return updateDatabase(object);
+                return this.updateDatabase(object);
             } catch (e) {
                 Winston.error(e);
                 return { status: -1 };
@@ -111,13 +111,17 @@ module.exports = class MensaPlanProvider {
 
     async updateMensaplan() {
         try {
-            crawler(url)
-                .then((res) => {
-                    createJSON(lineSplitter(res.text), resolve, reject);
-                })
-                .catch((err) => {
-                    reject(err);
-                })
+            const res = await crawler(this.pdfUrl);
+            this.createJSON(lineSplitter(res.text));
+
+            return { status: 1 }
+
+            // .then((res) => {
+            //     createJSON(lineSplitter(res.text), resolve, reject);
+            // })
+            // .catch((err) => {
+            //     reject(err);
+            // })
         } catch (e) {
             Winston.error(e);
             return { status: -1 };
