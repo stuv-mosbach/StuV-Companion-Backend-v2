@@ -104,9 +104,11 @@ module.exports = class Scheduler {
             });
 
             this.initiated = 1;
+            return { status: 1 }
         } catch (e) {
             Winston.error(e);
             this.initiated = 0;
+            return { status: -1 }
         }
     }
 
@@ -117,9 +119,10 @@ module.exports = class Scheduler {
     async getAgent() {
         try {
             if (!this.initiated) await this.init();
-            return this.agent;
+            return { status: 1, agent: this.agent }
         } catch (e) {
             Winston.error(e);
+            return { status: -1 }
         }
     }
 
@@ -130,19 +133,27 @@ module.exports = class Scheduler {
         try {
             if (!this.initiated) await this.init();
             await this.agent.start();
-            // this.agent.now(['Update Mensaplan', 'Update Courses', 'Update Lectures', 'Update News', 'Update Events']);
-            // await this.mensaplanProvider.updateMensaplan();
-            // await this.courseProvider.updateCourses(this.courseUrl);
-            // await this.lectureProvider.updateLectures();
-            // await this.newsProvider.loadFeed();
-            // await this.eventsProvider.updateEvents();
+            // await this.agent.now('Update Courses');
 
+            /*
+             * Trigger all jobs one time at server start
+             * Courses must be loaded, before lecture job is started
+             **/
+            await this.courseProvider.updateCourses(this.courseUrl);
+            this.agent.now(['Update Mensaplan', 'Update Courses', 'Update Lectures', 'Update News', 'Update Events']);
+
+            /**
+             * Scheduling jobs permanent 
+             */
             this.agent.every('15 minutes', ['Update News', 'Update Events']);
             this.agent.every('1 hour', ['Update Lectures']);
             this.agent.every('1 day', ['Update Mensaplan', 'Update Courses']);
             Winston.info("Scheduler running");
+
+            return { status: 1 }
         } catch (e) {
             Winston.error(e);
+            return { status: -1 }
         }
     }
 }

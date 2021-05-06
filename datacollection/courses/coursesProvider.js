@@ -57,7 +57,7 @@ module.exports = class CoursesProvider {
             const options = { upsert: true, new: true, useFindAndModify: false };
             const query = { course: element["course"] };
 
-            await this.courses.findOneAndUpdate(query, data, options);
+            await this.courses.findOneAndUpdate(query, data, options).exec();
             return { status: 1 };
         } catch (e) {
             Winston.error(e);

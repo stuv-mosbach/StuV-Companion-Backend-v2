@@ -64,7 +64,7 @@ process.on("exit", (code) => {
 
         app.use('/dashboard', basicAuth({
             users: {
-                admin: process.env.PASSWORD,
+                admin: "test"//process.env.PASSWORD,
             },
             challenge: true,
             realm: 'stuvbackendadmin',

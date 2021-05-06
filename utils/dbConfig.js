@@ -53,15 +53,15 @@ module.exports = class DatabaseAdapter {
         }
     }
 
-    /**
-     * 
-     * @returns {String} this.env - db environment variable
-     */
-    async getEnv() {
-        try {
-            return this.env;
-        } catch (e) {
-            Winston.error(e);
-        }
-    }
+    // /**
+    //  * 
+    //  * @returns {String} this.env - db environment variable
+    //  */
+    // async getEnv() {
+    //     try {
+    //         return this.env;
+    //     } catch (e) {
+    //         Winston.error(e);
+    //     }
+    // }
 }

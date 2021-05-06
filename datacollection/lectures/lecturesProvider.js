@@ -39,29 +39,43 @@ module.exports = class LectureProvider {
         }
 
 
-        /**
-         * 
-         * @param {Object} element 
-         * @param {Date} date 
-         * @returns 
-         */
-        this.updateDatabase = (element, date) => {
-            try {
-                const data = { uid: element["uid"], dtstamp: element["dtstamp"], dtstart: element["dtstart"], class: element["class"], created: element["created"], description: element["description"], 'last-modified': element["last-modified"], location: element["location"], summary: element["summary"], dtend: element["dtend"], course: element["course"], lastTouched: date };
-                const options = { upsert: true, new: true, useFindAndModify: false };
-                const query = { uid: element["uid"] };
-                this.lecture.findOneAndUpdate(query, data, options)
-                    .then((doc) => {
-                        return { status: 1 };
-                    })
-                    .catch((err) => {
-                        throw new Error(err);
-                    });
-            } catch (e) {
-                Winston.error(e);
-                return { status: -1 };
-            }
+        // /**
+        //  * 
+        //  * @param {Object} element 
+        //  * @param {Date} date 
+        //  * @returns 
+        //  */
+        // this.updateDatabase = (element, date) => {
+        //     try {
+        //         const data = { uid: element["uid"], dtstamp: element["dtstamp"], dtstart: element["dtstart"], class: element["class"], created: element["created"], description: element["description"], 'last-modified': element["last-modified"], location: element["location"], summary: element["summary"], dtend: element["dtend"], course: element["course"], lastTouched: date };
+        //         const options = { upsert: true, new: true, useFindAndModify: false };
+        //         const query = { uid: element["uid"] };
+        //         await this.lecture.findOneAndUpdate(query, data, options).exec();
+        //         return { status: 1 };
+        //     } catch (e) {
+        //         Winston.error(e);
+        //         return { status: -1 };
+        //     }
 
+        // }
+    }
+
+    /**
+     * 
+     * @param {*} element 
+     * @param {*} date 
+     * @returns 
+     */
+    async updateDatabase(element, date) {
+        try {
+            const data = { uid: element["uid"], dtstamp: element["dtstamp"], dtstart: element["dtstart"], class: element["class"], created: element["created"], description: element["description"], 'last-modified': element["last-modified"], location: element["location"], summary: element["summary"], dtend: element["dtend"], course: element["course"], lastTouched: date };
+            const options = { upsert: true, new: true, useFindAndModify: false };
+            const query = { uid: element["uid"] };
+            await this.lecture.findOneAndUpdate(query, data, options).exec();
+            return { status: 1 };
+        } catch (e) {
+            Winston.error(e);
+            return { status: -1 };
         }
     }
 
@@ -84,7 +98,7 @@ module.exports = class LectureProvider {
                 const resElem = await iCalParser.main(element.url);
                 for (const item of resElem.events) {
                     item.course = element.course;
-                    this.updateDatabase(item, date);
+                    await this.updateDatabase(item, date);
                 }
                 this.cleanUp(date);
             }
