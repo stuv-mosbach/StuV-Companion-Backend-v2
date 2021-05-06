@@ -5,8 +5,10 @@ const Schema = mongoose.Schema;
 
 
 module.exports = class ModelProvider {
-    constructor() {
-        this.newsSchema = new Schema({
+    constructor(dbConnection) {
+        this.dbConnection = dbConnection;
+
+        this.newsSchema = dbConnection.model("news", new Schema({
             creator: String,
             title: String,
             link: String,
@@ -17,14 +19,14 @@ module.exports = class ModelProvider {
             contentSnippet: String,
             guid: String,
             isoDate: String
-        });
+        }));
 
-        this.courseSchema = new Schema({
+        this.courseSchema = dbConnection.model("courses", new Schema({
             course: String,
             url: String
-        });
+        }));
 
-        this.eventSchema = new Schema({
+        this.eventSchema = dbConnection.model("events", new Schema({
             dtstart: String,
             dtend: String,
             dtstamp: String,
@@ -37,18 +39,18 @@ module.exports = class ModelProvider {
             status: String,
             summary: String,
             transp: String
-        });
+        }));
 
-        this.mensaplanSchema = new Schema({
+        this.mensaplanSchema = dbConnection.model("mensa", new Schema({
             validUntil: String,
             Montag: [String],
             Dienstag: [String],
             Mittwoch: [String],
             Donnerstag: [String],
             Freitag: [String]
-        });
+        }));
 
-        this.lectureSchema = new Schema({
+        this.lectureSchema = dbConnection.model("lecture", new Schema({
             uid: String,
             dtstamp: String,
             dtstart: String,
@@ -61,7 +63,7 @@ module.exports = class ModelProvider {
             dtend: String,
             course: String,
             lastTouched: String
-        });
+        }));
     }
 
     getNewsSchema() { return this.newsSchema };

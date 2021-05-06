@@ -8,17 +8,17 @@ const ReaderConstructor = require('rss-parser');
 const Reader = new ReaderConstructor();
 
 // const mongoose = require('mongoose');
-const provider = new (require('../../utils/modelProvider'))();
-const newsSchema = provider.getNewsSchema();
+// const provider = new (require('../../utils/modelProvider'))();
+// const newsSchema = provider.getNewsSchema();
 
 // const newsUrl = 'https://stuv-mosbach.de/feed/';
 
 module.exports = class {
 
-    constructor(url, dbConnection) {
+    constructor(url, news) {
         this.newsUrl = url;
-        this.dbConnection = dbConnection;
-        this.news = dbConnection.model("news", newsSchema);
+        // this.dbConnection = dbConnection;
+        this.news = news; //dbConnection.model("news", newsSchema);
     }
 
     /**

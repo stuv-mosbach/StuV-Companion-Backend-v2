@@ -37,7 +37,7 @@ process.on("exit", (code) => {
         const scheduler = new (require('./scheduler/scheduler'))(await dbAdapater.getDBUrl(), mongoConnection.dbConnection, config.staticUrls.news, config.staticUrls.courses, config.staticUrls.events, config.staticUrls.mensa);
         const agent = await scheduler.getAgent();        
 
-        const apiRoutes = require('./api/routes');
+        const apiRoutes = new (require('./api/routes'))(mongoConnection.dbConnection);
 
 
 
@@ -70,7 +70,7 @@ process.on("exit", (code) => {
             realm: 'stuvbackendadmin',
         }), agendash(agent.agent));
 
-        app.use('/api', apiRoutes);
+        app.use('/api', apiRoutes.router);
 
         /**
          * init express  

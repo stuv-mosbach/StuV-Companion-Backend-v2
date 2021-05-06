@@ -4,8 +4,8 @@ const path = require("path");
 const config = require(path.resolve(process.cwd() + '/config.json'));
 const Winston = new (require("../../utils/Winston"))(config.log).logger;
 
-const provider = new (require('../../utils/modelProvider'));
-const coursesSchema = provider.getCourseSchema();
+// const provider = new (require('../../utils/modelProvider'))();
+// const coursesSchema = provider.getCourseSchema();
 const axios = require("axios");
 // const courseUrl = "http://ics.mosbach.dhbw.de/ics/calendars.list";
 
@@ -15,11 +15,11 @@ module.exports = class CoursesProvider {
      * 
      * @param {String} url - http url to courses
      */
-    constructor(url, dbConnection) {
+    constructor(url, courses) {
         this.courseUrl = url;
-        this.dbConnection = dbConnection;
+        // this.dbConnection = dbConnection;
 
-        this.courses = this.dbConnection.model("courses", coursesSchema);
+        this.courses = courses; //this.dbConnection.model("courses", coursesSchema);
     }
 
     /**

@@ -140,12 +140,12 @@ module.exports = class Scheduler {
              * Courses must be loaded, before lecture job is started
              **/
             await this.courseProvider.updateCourses(this.courseUrl);
-            this.agent.now(['Update Mensaplan', 'Update Courses', 'Update Lectures', 'Update News', 'Update Events']);
+            this.agent.now(['Update Mensaplan', 'Update Lectures', 'Update News', 'Update Events']);
 
             /**
              * Scheduling jobs permanent 
              */
-            this.agent.every('15 minutes', ['Update News', 'Update Events']);
+            this.agent.every('16 minutes', ['Update News', 'Update Events']);
             this.agent.every('1 hour', ['Update Lectures']);
             this.agent.every('1 day', ['Update Mensaplan', 'Update Courses']);
             Winston.info("Scheduler running");

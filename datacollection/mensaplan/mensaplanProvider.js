@@ -8,8 +8,8 @@ const lineSplitter = require('split-lines');
 const crawler = require('crawler-request');
 
 // const mongoose = require('mongoose');
-const provider = new (require('../../utils/modelProvider'))();
-const mensaSchema = provider.getMensaplanSchema();
+// const provider = new (require('../../utils/modelProvider'))();
+// const mensaSchema = provider.getMensaplanSchema();
 
 // const pdfUrl = "https://www.studentenwerk.uni-heidelberg.de/sites/default/files/download/pdf/sp-mos-mensa-aktuell.pdf";
 
@@ -20,11 +20,11 @@ module.exports = class MensaPlanProvider {
      * @param {String} url 
      * @param {Object} dbConnection
      */
-    constructor(url, dbConnection) {
+    constructor(url, mensa) {
         this.pdfUrl = url;
-        this.dbConnection = dbConnection;
+        // this.dbConnection = dbConnection;
 
-        this.mensa = dbConnection.model("mensa", mensaSchema);
+        this.mensa = mensa; //dbConnection.model("mensa", mensaSchema);
     }
 
     /**

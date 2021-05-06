@@ -8,19 +8,19 @@ const axios = require("axios");
 const iCalParser = new (require('../../utils/iCalParser'))();
 
 // const mongoose = require('mongoose');
-const provider = new (require('../../utils/modelProvider'))();
-const lectureSchema = provider.getLectureSchema();
-const courseSchema = provider.getCourseSchema();
+// const provider = new (require('../../utils/modelProvider'))();
+// const lectureSchema = provider.getLectureSchema();
+// const courseSchema = provider.getCourseSchema();
 
 module.exports = class LectureProvider {
     /**
      * 
      */
-    constructor(dbConnection) {
+    constructor(course, lecture) {
 
-        this.dbConnection = dbConnection;
-        this.course = dbConnection.model('course', courseSchema);
-        this.lecture = dbConnection.model('lecture', lectureSchema);
+        // this.dbConnection = dbConnection;
+        this.course = course; //dbConnection.model('courses', courseSchema);
+        this.lecture = lecture; //dbConnection.model('lecture', lectureSchema);
 
         /**
          * 

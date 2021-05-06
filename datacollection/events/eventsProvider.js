@@ -6,17 +6,17 @@ const Winston = new (require("../../utils/Winston"))(config.log).logger;
 
 const iCalParser = new (require('../../utils/iCalParser'))();
 
-const provider = new (require('../../utils/modelProvider'))();
-const eventSchema = provider.getEventSchema();
+// const provider = new (require('../../utils/modelProvider'))();
+// const eventSchema = provider.getEventSchema();
 
 // const calendarUrl = "https://calendar.google.com/calendar/ical/asta.dhbw.de_08mkcuqcrppq8cg8vlutdsgpjg%40group.calendar.google.com/public/basic.ics";
 
 module.exports = class EventsProvider {
-    constructor(url, dbConnection) {
+    constructor(url, event) {
         this.calendarUrl = url;
-        this.dbConnection = dbConnection;
+        // this.dbConnection = dbConnection;
 
-        this.event = this.dbConnection.model("event", eventSchema);
+        this.event = event; //this.dbConnection.model("event", eventSchema);
 
     }
 
