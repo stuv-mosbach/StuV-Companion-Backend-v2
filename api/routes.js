@@ -10,14 +10,16 @@ const Winston = new (require("../utils/Winston"))(config.log).logger;
 
 
 module.exports = class ApiRoutes {
-  constructor(dbConnection) {
+  constructor(ModelProvider) {
     this.router = require('express').Router();
 
-    this.courses = dbConnection.model("courses", provider.getCourseSchema());
-    this.lecture = dbConnection.model("lecture", provider.getLectureSchema());
-    this.event = dbConnection.model("event", provider.getEventSchema());
-    this.mensa = dbConnection.model("mensa", provider.getMensaplanSchema());
-    this.news = dbConnection.model("news", provider.getNewsSchema());
+    this.ModelProvider = ModelProvider;
+
+    this.courses = this.ModelProvider.getCourseSchema();
+    this.lecture = this.ModelProvider.getLectureSchema();
+    this.event = this.ModelProvider.getEventSchema();
+    this.mensa = this.ModelProvider.getMensaplanSchema();
+    this.news = this.ModelProvider.getNewsSchema();
 
     this.router.get('/courses', (req, res) => {
       try {
@@ -49,7 +51,7 @@ module.exports = class ApiRoutes {
 
     this.router.get('/futureLectures/:course', (req, res) => {
       try {
-        lecture.find({ course: req.params.course.toUpperCase() }, (err, data) => {
+        this.lecture.find({ course: req.params.course.toUpperCase() }, (err, data) => {
           if (err) res.json(err);
           const response = [];
           data.forEach(e => {
@@ -77,7 +79,7 @@ module.exports = class ApiRoutes {
             if ((new Date()).getMonth() + 1 == e.validUntil.substring(3, 5) && (new Date()).toJSON().substring(8, 10) <= e.validUntil.substring(0, 2)) men.push({ validUntil: e.validUntil, montag: e.Montag, dienstag: e.Dienstag, mittwoch: e.Mittwoch, donnerstag: e.Donnerstag, freitag: e.Freitag });
           });
           //Todays lectures
-          lecture.find({ course: req.params.course.toUpperCase() }, (err, data) => {
+          this.lecture.find({ course: req.params.course.toUpperCase() }, (err, data) => {
             if (err) res.json(err);
             data.forEach(e => {
               if ((new Date(e.dtstart)).setHours(0, 0, 0, 0) == (new Date()).setHours(0, 0, 0, 0)) lec.push({ start: e.dtstart, end: e.dtend, lastModified: e['last-modified'], title: e.summary, description: e.description, location: e.location, course: e.course });
@@ -159,4 +161,4 @@ module.exports = class ApiRoutes {
 
 
 
-module.exports = router;
+// module.exports = router;

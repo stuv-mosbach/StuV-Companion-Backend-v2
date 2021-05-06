@@ -16,11 +16,11 @@ module.exports = class Scheduler {
      * @param {String} eventsUrl 
      * @param {String} mensaUrl 
      */
-    constructor(dbUrl, dbConnection, newsUrl, courseUrl, eventsUrl, mensaUrl) {
+    constructor(dbUrl, ModelProvider, newsUrl, courseUrl, eventsUrl, mensaUrl) {
         this.initiated = 0;
 
         this.dbUrl = dbUrl;
-        this.dbConnection = dbConnection;
+        this.ModelProvider = ModelProvider;
         this.newsUrl = newsUrl;
         this.courseUrl = courseUrl;
         this.eventsUrl = eventsUrl;
@@ -38,11 +38,11 @@ module.exports = class Scheduler {
                 }
             });
 
-        this.courseProvider = new (require('../datacollection/courses/coursesProvider'))(this.courseUrl, this.dbConnection);
-        this.eventsProvider = new (require('../datacollection/events/eventsProvider'))(this.eventsUrl, this.dbConnection);
-        this.lectureProvider = new (require('../datacollection/lectures/lecturesProvider'))(this.dbConnection);
-        this.mensaplanProvider = new (require('../datacollection/mensaplan/mensaplanProvider'))(this.mensaUrl, this.dbConnection);
-        this.newsProvider = new (require('../datacollection/news/newsProvider'))(this.newsUrl, this.dbConnection);
+        this.courseProvider = new (require('../datacollection/courses/coursesProvider'))(this.courseUrl, this.ModelProvider.getCourseSchema());
+        this.eventsProvider = new (require('../datacollection/events/eventsProvider'))(this.eventsUrl, this.ModelProvider.getEventSchema());
+        this.lectureProvider = new (require('../datacollection/lectures/lecturesProvider'))(this.ModelProvider.getLectureSchema());
+        this.mensaplanProvider = new (require('../datacollection/mensaplan/mensaplanProvider'))(this.mensaUrl, this.ModelProvider.getMensaplanSchema());
+        this.newsProvider = new (require('../datacollection/news/newsProvider'))(this.newsUrl, this.ModelProvider.getNewsSchema());
     }
 
     /**

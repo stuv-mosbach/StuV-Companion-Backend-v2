@@ -34,10 +34,12 @@ process.on("exit", (code) => {
         const dbAdapater = new (require('./utils/dbConfig'))(config.db.host, config.db.port, config.db.env);
         const mongoConnection = await dbAdapater.connect();
 
-        const scheduler = new (require('./scheduler/scheduler'))(await dbAdapater.getDBUrl(), mongoConnection.dbConnection, config.staticUrls.news, config.staticUrls.courses, config.staticUrls.events, config.staticUrls.mensa);
+        const ModelProvider = new(require("./utils/modelProvider"))(mongoConnection.dbConnection);
+
+        const scheduler = new (require('./scheduler/scheduler'))(await dbAdapater.getDBUrl(), ModelProvider, config.staticUrls.news, config.staticUrls.courses, config.staticUrls.events, config.staticUrls.mensa);
         const agent = await scheduler.getAgent();        
 
-        const apiRoutes = new (require('./api/routes'))(mongoConnection.dbConnection);
+        const apiRoutes = new (require('./api/routes'))(ModelProvider);
 
 
 
