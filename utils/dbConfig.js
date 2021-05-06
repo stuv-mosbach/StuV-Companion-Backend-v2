@@ -7,6 +7,14 @@ const Winston = new (require("./Winston"))(config.log).logger;
 const mongoose = require('mongoose');
 
 module.exports = class DatabaseAdapter {
+
+    /**
+     * Instantiate the mongodb adapter
+     * 
+     * @param {String} dbUrl 
+     * @param {Number} dbPort 
+     * @param {String} dbEnv 
+     */
     constructor(dbUrl, dbPort, dbEnv) {
         this.url = dbUrl + ":" + dbPort;
         this.env = dbEnv;
@@ -16,7 +24,9 @@ module.exports = class DatabaseAdapter {
     }
 
     /**
-     * @returns {Object} 
+     * Connect to database
+     * 
+     * @returns {Promise} {status: Number}
      */
     async connect() {
         try {
@@ -52,16 +62,4 @@ module.exports = class DatabaseAdapter {
             Winston.error(e);
         }
     }
-
-    // /**
-    //  * 
-    //  * @returns {String} this.env - db environment variable
-    //  */
-    // async getEnv() {
-    //     try {
-    //         return this.env;
-    //     } catch (e) {
-    //         Winston.error(e);
-    //     }
-    // }
 }

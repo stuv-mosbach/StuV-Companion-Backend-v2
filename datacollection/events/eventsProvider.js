@@ -12,6 +12,13 @@ const iCalParser = new (require('../../utils/iCalParser'))();
 // const calendarUrl = "https://calendar.google.com/calendar/ical/asta.dhbw.de_08mkcuqcrppq8cg8vlutdsgpjg%40group.calendar.google.com/public/basic.ics";
 
 module.exports = class EventsProvider {
+
+    /**
+     * Instantiate EventsProvider
+     * 
+     * @param {String} url 
+     * @param {MongoDB Model} event 
+     */
     constructor(url, event) {
         this.calendarUrl = url;
         // this.dbConnection = dbConnection;
@@ -23,7 +30,7 @@ module.exports = class EventsProvider {
     /**
      * 
      * @param {Object} element 
-     * @returns {Object} {status: {Number}} - e.g. { status: -1 }
+     * @returns {Object} {status: Number} - e.g. { status: -1 }
      */
     async updateDatabase(element) {
         try {

@@ -10,6 +10,11 @@ const Winston = new (require("../utils/Winston"))(config.log).logger;
 
 
 module.exports = class ApiRoutes {
+
+  /**
+   * 
+   * @param {ModelProvider} ModelProvider 
+   */
   constructor(ModelProvider) {
     this.router = require('express').Router();
 
@@ -158,7 +163,3 @@ module.exports = class ApiRoutes {
 
   }
 }
-
-
-
-// module.exports = router;

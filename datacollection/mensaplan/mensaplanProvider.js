@@ -16,9 +16,10 @@ const crawler = require('crawler-request');
 module.exports = class MensaPlanProvider {
 
     /**
+     * Instantiate MensaPlanProvider
      * 
      * @param {String} url 
-     * @param {Object} dbConnection
+     * @param {MongoDB Model} dbConnection
      */
     constructor(url, mensa) {
         this.pdfUrl = url;

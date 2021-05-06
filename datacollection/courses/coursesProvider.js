@@ -4,22 +4,20 @@ const path = require("path");
 const config = require(path.resolve(process.cwd() + '/config.json'));
 const Winston = new (require("../../utils/Winston"))(config.log).logger;
 
-// const provider = new (require('../../utils/modelProvider'))();
-// const coursesSchema = provider.getCourseSchema();
 const axios = require("axios");
-// const courseUrl = "http://ics.mosbach.dhbw.de/ics/calendars.list";
 
 module.exports = class CoursesProvider {
 
     /**
+     * Instantiate CoursesProvider
      * 
-     * @param {String} url - http url to courses
+     * @param {String} url 
+     * @param {MongoDb Model} courses 
      */
     constructor(url, courses) {
         this.courseUrl = url;
-        // this.dbConnection = dbConnection;
 
-        this.courses = courses; //this.dbConnection.model("courses", coursesSchema);
+        this.courses = courses;
     }
 
     /**
@@ -65,8 +63,7 @@ module.exports = class CoursesProvider {
         }
     }
 
-    /**
-     * Private method
+    /**     
      *
      * @param {String} url - http url for courses
      * @returns {Object} {status: {Number}} - e.g. { status: -1 }
@@ -87,7 +84,7 @@ module.exports = class CoursesProvider {
 
     /**
      * 
-     * @returns 
+     * @returns {Promise} {status: Number} 
      */
     async run() {
         try {

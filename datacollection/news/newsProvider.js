@@ -13,8 +13,14 @@ const Reader = new ReaderConstructor();
 
 // const newsUrl = 'https://stuv-mosbach.de/feed/';
 
-module.exports = class {
+module.exports = class NewsProvider{
 
+    /**
+     * Instantiate NewsProvider
+     * 
+     * @param {String} url 
+     * @param {mongoDB Model} news 
+     */
     constructor(url, news) {
         this.newsUrl = url;
         // this.dbConnection = dbConnection;
@@ -23,8 +29,8 @@ module.exports = class {
 
     /**
      * 
-     * @param {*} element 
-     * @returns 
+     * @param {Obejct} element 
+     * @returns {Promise} {status: Number} 
      */
     async updateDBEntrys(element) {
         try {
@@ -42,7 +48,7 @@ module.exports = class {
 
     /**
      * 
-     * @returns 
+     * @returns {Promise} {status: Number} 
      */
     async loadFeed() {
         try {

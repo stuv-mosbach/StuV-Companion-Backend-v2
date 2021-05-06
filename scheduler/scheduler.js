@@ -9,8 +9,10 @@ const agenda = require('agenda');
 module.exports = class Scheduler {
 
     /**
+     * Instantiate Scheduler
      * 
      * @param {String} dbUrl - connection string to db
+     * @param {ModelProvider} - instance of class ModelProvider
      * @param {String} newsUrl 
      * @param {String} courseUrl 
      * @param {String} eventsUrl 
@@ -48,6 +50,7 @@ module.exports = class Scheduler {
     /**
      * init module Scheduler
      * define all agenda actions
+     * @returns {Promise} {status: Number}
      */
     async init() {
         try {
@@ -128,6 +131,7 @@ module.exports = class Scheduler {
 
     /**
      * run scheduler
+     * returns {Promise} {status: Number}
      */
     async run() {
         try {

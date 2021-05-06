@@ -5,6 +5,15 @@ const Schema = mongoose.Schema;
 
 
 module.exports = class ModelProvider {
+
+    /**
+     * Instantiate ModelProvider
+     * This should only be instantiated one time per Application!
+     * Otherwise it breaks with the mongodb model restrictions.
+     * Just pass an instance of this class around your modules
+     * 
+     * @param {Object} dbConnection 
+     */
     constructor(dbConnection) {
         this.dbConnection = dbConnection;
 
@@ -66,14 +75,34 @@ module.exports = class ModelProvider {
         }));
     }
 
+    /**
+     * 
+     * @returns this.newsSchema
+     */
     getNewsSchema() { return this.newsSchema };
 
+    /**
+     * 
+     * @returns this.coursesSchema
+     */
     getCourseSchema() { return this.courseSchema };
 
+    /**
+     * 
+     * @returns this.eventSchema
+     */
     getEventSchema() { return this.eventSchema };
 
+    /**
+     * 
+     * @returns this.mensaplanSchema
+     */
     getMensaplanSchema() { return this.mensaplanSchema };
 
+    /**
+     * 
+     * @returns this.lectureSchema
+     */
     getLectureSchema() { return this.lectureSchema };
 
 }

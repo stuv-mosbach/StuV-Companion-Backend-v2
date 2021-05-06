@@ -5,6 +5,11 @@ require("winston-daily-rotate-file");
 
 
 module.exports = class Winston {
+
+    /**
+     * Instantiate Logger
+     * @param {Object} options 
+     */
     constructor(options) {
         this.options = options;
         this.logger = winston.createLogger({

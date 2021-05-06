@@ -14,7 +14,10 @@ const iCalParser = new (require('../../utils/iCalParser'))();
 
 module.exports = class LectureProvider {
     /**
+     * Instantiate LectureProvider
      * 
+     * @param {MongoDB Model} course 
+     * @param {MongoDB Model} lecture 
      */
     constructor(course, lecture) {
 
@@ -25,7 +28,7 @@ module.exports = class LectureProvider {
         /**
          * 
          * @param {Date} date 
-         * @returns 
+         * @returns {Promise} {status: Number} 
          */
         this.cleanUp = (date) => {
             try {
