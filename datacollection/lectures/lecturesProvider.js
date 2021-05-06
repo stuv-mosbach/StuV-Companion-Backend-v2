@@ -5,11 +5,11 @@ const config = require(path.resolve(process.cwd() + '/config.json'));
 const Winston = new (require("../../utils/Winston"))(config.log).logger;
 const axios = require("axios");
 
-const iCalParser = new(require('../../utils/iCalParser'))();
+const iCalParser = new (require('../../utils/iCalParser'))();
 
 // const mongoose = require('mongoose');
 const provider = new (require('../../utils/modelProvider'))();
-const lecture = provider.getLectureSchema();
+const lectureSchema = provider.getLectureSchema();
 const courseSchema = provider.getCourseSchema();
 
 module.exports = class LectureProvider {
@@ -20,6 +20,7 @@ module.exports = class LectureProvider {
 
         this.dbConnection = dbConnection;
         this.course = dbConnection.model('course', courseSchema);
+        this.lecture = dbConnection.model('lecture', lectureSchema);
 
         /**
          * 
@@ -29,7 +30,7 @@ module.exports = class LectureProvider {
         this.cleanUp = (date) => {
             try {
                 const query = { lastTouched: { $ne: date } };
-                lecture.find(query).remove();
+                this.lecture.find(query).remove();
                 return { status: -1 };
             } catch (e) {
                 Winston.error(e);
@@ -49,7 +50,7 @@ module.exports = class LectureProvider {
                 const data = { uid: element["uid"], dtstamp: element["dtstamp"], dtstart: element["dtstart"], class: element["class"], created: element["created"], description: element["description"], 'last-modified': element["last-modified"], location: element["location"], summary: element["summary"], dtend: element["dtend"], course: element["course"], lastTouched: date };
                 const options = { upsert: true, new: true, useFindAndModify: false };
                 const query = { uid: element["uid"] };
-                lecture.findOneAndUpdate(query, data, options)
+                this.lecture.findOneAndUpdate(query, data, options)
                     .then((doc) => {
                         return { status: 1 };
                     })
@@ -64,19 +65,22 @@ module.exports = class LectureProvider {
         }
     }
 
+    /**
+     * 
+     * @returns {Promise }
+     */
     async updateLectures() {
-        try {            
-            const res = await axios.get("");
+        try {
+            // await this.course.find({}, 'courses url', function (err, courses) {
+            //     if (err) throw new Error(err);
 
-            // await this.course.find({}, 'http://ics.mosbach.dhbw.de/ics/calendars.list', function (err, res) {
-            //     if (err) {
-            //         throw new Error(err);
-            //     } else {
-            //         courses = res;
-            //     }
+
+
             // })
+            const courses = await this.course.find({}).exec();
+
             const date = (new Date()).toString();
-            for (const element of res) {
+            for (const element of courses) {
                 const resElem = await iCalParser.main(element.url);
                 for (const item of resElem.events) {
                     item.course = element.course;
