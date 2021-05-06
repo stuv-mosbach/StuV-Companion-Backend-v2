@@ -4,7 +4,7 @@ const path = require("path");
 const config = require(path.resolve(process.cwd() + '/config.json'));
 const Winston = new (require("../utils/Winston"))(config.log).logger;
 
-const agenda = require('agenda').default;
+const agenda = require('agenda');
 
 module.exports = class Scheduler {
 

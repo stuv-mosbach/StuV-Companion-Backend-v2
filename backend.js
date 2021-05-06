@@ -1,6 +1,5 @@
 "use strict";
 
-const { mongo } = require('mongoose');
 const path = require('path');
 const config = require(path.resolve(process.cwd() + '/config.json'));
 const Winston = new (require("./utils/Winston"))(config.log).logger;
@@ -30,13 +29,13 @@ process.on("exit", (code) => {
         const express = require('express');
         const basicAuth = require('express-basic-auth');
         const cors = require('cors');
+        const agendash = require('agendash');
 
         const dbAdapater = new (require('./utils/dbConfig'))(config.db.host, config.db.port, config.db.env);
         const mongoConnection = await dbAdapater.connect();
 
         const scheduler = new (require('./scheduler/scheduler'))(await dbAdapater.getDBUrl(), mongoConnection.dbConnection, config.staticUrls.news, config.staticUrls.courses, config.staticUrls.events, config.staticUrls.mensa);
-        const agent = await scheduler.getAgent();
-        const agendash = require('agendash');
+        const agent = await scheduler.getAgent();        
 
         const apiRoutes = require('./api/routes');
 
