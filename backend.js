@@ -25,7 +25,7 @@ process.on("exit", (code) => {
 });
 
 (async function () {
-    try {       
+    try {
         require('dotenv').config();
         const express = require('express');
         const basicAuth = require('express-basic-auth');
@@ -34,8 +34,9 @@ process.on("exit", (code) => {
         const dbAdapater = new (require('./utils/dbConfig'))(config.db.host, config.db.port, config.db.env);
         const mongoConnection = await dbAdapater.connect();
 
-        const agendash = require('agendash');
         const scheduler = new (require('./scheduler/scheduler'))(await dbAdapater.getDBUrl(), mongoConnection.dbConnection, config.staticUrls.news, config.staticUrls.courses, config.staticUrls.events, config.staticUrls.mensa);
+        const agent = await scheduler.getAgent();
+        const agendash = require('agendash');
 
         const apiRoutes = require('./api/routes');
 
@@ -68,7 +69,7 @@ process.on("exit", (code) => {
             },
             challenge: true,
             realm: 'stuvbackendadmin',
-        }), agendash(await scheduler.getAgent()));
+        }), agendash(agent.agent));
 
         app.use('/api', apiRoutes);
 
@@ -76,7 +77,7 @@ process.on("exit", (code) => {
          * init express  
          * */
         app.listen(config.webserver.port, async () => {
-            try {                
+            try {
                 Winston.info(`Server up and Running on port: ${config.webserver.port}`);
             } catch (e) {
                 Winston.error(e);

@@ -37,34 +37,13 @@ module.exports = class LectureProvider {
                 return { status: -1 };
             }
         }
-
-
-        // /**
-        //  * 
-        //  * @param {Object} element 
-        //  * @param {Date} date 
-        //  * @returns 
-        //  */
-        // this.updateDatabase = (element, date) => {
-        //     try {
-        //         const data = { uid: element["uid"], dtstamp: element["dtstamp"], dtstart: element["dtstart"], class: element["class"], created: element["created"], description: element["description"], 'last-modified': element["last-modified"], location: element["location"], summary: element["summary"], dtend: element["dtend"], course: element["course"], lastTouched: date };
-        //         const options = { upsert: true, new: true, useFindAndModify: false };
-        //         const query = { uid: element["uid"] };
-        //         await this.lecture.findOneAndUpdate(query, data, options).exec();
-        //         return { status: 1 };
-        //     } catch (e) {
-        //         Winston.error(e);
-        //         return { status: -1 };
-        //     }
-
-        // }
     }
 
     /**
      * 
      * @param {*} element 
      * @param {*} date 
-     * @returns 
+     * @returns {Object} {status: Number}  
      */
     async updateDatabase(element, date) {
         try {
@@ -81,16 +60,10 @@ module.exports = class LectureProvider {
 
     /**
      * 
-     * @returns {Promise }
+     * @returns {Object} {status: Number} 
      */
     async updateLectures() {
         try {
-            // await this.course.find({}, 'courses url', function (err, courses) {
-            //     if (err) throw new Error(err);
-
-
-
-            // })
             const courses = await this.course.find({}).exec();
 
             const date = (new Date()).toString();
@@ -110,46 +83,3 @@ module.exports = class LectureProvider {
     }
 
 }
-
-// exports.run = () => {
-//     return new Promise((resolve, reject) => {
-//         updateLectures(resolve, reject);
-//     })
-// }
-
-// const updateLectures = async (resolve, reject) => {
-//     let courses = [];
-//     await course.find({}, 'course url', function (err, res) {
-//         if (err) {
-//             reject(err);
-//         } else {
-//             courses = res;
-//         }
-//     })
-//     const date = (new Date()).toString();
-//     courses.forEach(element => {
-//         iCalParser.main(element.url)
-//             .then((res) => {
-//                 res.events.forEach(e => {
-//                     e.course = element.course;
-//                     updateDatabase(e, date, reject);
-//                 });
-//                 cleanUp(date, reject);
-//                 resolve();
-//             })
-//             .catch((err) => {
-//                 reject(err);
-//             });
-//     });
-// }
-
-// //Not used?
-// const loadCourses = async (reject) => {
-//     course.find({}, 'course url', function (err, res) {
-//         if (err) {
-//             reject(err);
-//         } else {
-//             return res;
-//         }
-//     })
-// }
