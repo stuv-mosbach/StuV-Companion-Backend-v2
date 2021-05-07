@@ -119,16 +119,20 @@ module.exports = class ApiRoutes {
     this.router.get('/events', (req, res) => {
       try {
         this.event.find((err, data) => {
-          if (err) res.json(err);
+          if (err) throw new Error(err);//res.json(err);
           const response = [];
-          data.forEach(e => {
-            if ((new Date(e.dtstart).setHours(0, 0, 0, 0)) >= (new Date().setHours(0, 0, 0, 0))) response.push({ start: e.dtstart, end: e.dtend, lastModified: e['last-modified'], title: e.summary, description: e.description, location: e.location });
-          });
+          for (const element of data) {
+            if (new Date(element.dtstart).setHours(0, 0, 0, 0) >= new Date().setHours(0, 0, 0, 0)) {
+              response.push({ start: element.dtstart, end: element.dtend, lastModified: element['last-modified'], title: element.summary, description: element.description, location: element.location })
+            }
+          }
           response.sort((a, b) => { return new Date(a.start) - new Date(b.start) });
-          res.json(response);
+          return res.json(response);
         });
       } catch (e) {
         Winston.error(e);
+        response.status(500);
+        return response.end(e.message);
       }
     });
 
