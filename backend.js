@@ -34,10 +34,10 @@ process.on("exit", (code) => {
         const dbAdapater = new (require('./utils/dbConfig'))(config.db.host, config.db.port, config.db.env);
         const mongoConnection = await dbAdapater.connect();
 
-        const ModelProvider = new(require("./utils/modelProvider"))(mongoConnection.dbConnection);
+        const ModelProvider = new (require("./utils/modelProvider"))(mongoConnection.dbConnection);
 
         const scheduler = new (require('./scheduler/scheduler'))(await dbAdapater.getDBUrl(), ModelProvider, config.staticUrls.news, config.staticUrls.courses, config.staticUrls.events, config.staticUrls.mensa);
-        const agent = await scheduler.getAgent();        
+        const agent = await scheduler.getAgent();
 
         const apiRoutes = new (require('./api/routes'))(ModelProvider);
 
@@ -66,7 +66,7 @@ process.on("exit", (code) => {
 
         app.use('/dashboard', basicAuth({
             users: {
-                admin: "test"//process.env.PASSWORD,
+                admin: process.env.PASSWORD,
             },
             challenge: true,
             realm: 'stuvbackendadmin',
