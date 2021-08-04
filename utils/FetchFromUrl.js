@@ -16,7 +16,7 @@ module.exports = class FetchFromUrl{
     async fetch(url){
         try {
             this.isValidUrl();
-            return axios.get(url);
+            return await axios.get(url);
         } catch (error) {
             throw error;
         }
