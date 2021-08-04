@@ -1,35 +1,65 @@
-var ReaderConstructor = require('rss-parser');
-var Reader = new ReaderConstructor();
+"use strict"
 
-var mongoose = require('mongoose');
-var provider = require('../../utils/modelProvider');
-var news = mongoose.model('news', provider.getNewsSchema());
+const path = require("path");
+const config = require(path.resolve(process.cwd() + '/config.json'));
+const Winston = new (require("../../utils/Winston"))(config.log).logger;
 
-var newsUrl = 'https://stuv-mosbach.de/feed/';
+const ReaderConstructor = require('rss-parser');
+const Reader = new ReaderConstructor();
 
-exports.run = () => {
-    return new Promise((resolve, reject) => {
-        loadFeed(newsUrl, resolve, reject);
-    })
-}
+// const mongoose = require('mongoose');
+// const provider = new (require('../../utils/modelProvider'))();
+// const newsSchema = provider.getNewsSchema();
 
-const loadFeed = async (url, resolve, reject) => {
-    let newsData = await Reader.parseURL(newsUrl);
-    newsData.items.forEach(e => {
-        updateDBEntrys(e, reject)
-    });
-    resolve();
-}
+// const newsUrl = 'https://stuv-mosbach.de/feed/';
 
-const updateDBEntrys = (element, reject) => {
-    const data = { creator: element["creator"], title: element["title"], link: element["link"], pubDate: element["pubDate"], 'content:encoded': element["content:encoded"], 'dc:creator': element["dc:creator"], content: element["content"], contentSnippet: element["contentSnippet"], guid: element["guid"], isoDate: element["isoDate"] };
-    const options = { upsert: true, new: true, useFindAndModify: false };
-    const query = { isoDate: element["isoDate"] };
-    news.findOneAndUpdate(query, data, options)
-        .then((doc) => {
+module.exports = class NewsProvider{
 
-        })
-        .catch((err) => {
-            reject(err);
-        });
+    /**
+     * Instantiate NewsProvider
+     * 
+     * @param {String} url 
+     * @param {mongoDB Model} news 
+     */
+    constructor(url, news) {
+        this.newsUrl = url;
+        // this.dbConnection = dbConnection;
+        this.news = news; //dbConnection.model("news", newsSchema);
+    }
+
+    /**
+     * 
+     * @param {Obejct} element 
+     * @returns {Promise} {status: Number} 
+     */
+    async updateDBEntrys(element) {
+        try {
+            const data = { creator: element["creator"], title: element["title"], link: element["link"], pubDate: element["pubDate"], 'content:encoded': element["content:encoded"], 'dc:creator': element["dc:creator"], content: element["content"], contentSnippet: element["contentSnippet"], guid: element["guid"], isoDate: element["isoDate"] };
+            const options = { upsert: true, new: true, useFindAndModify: false };
+            const query = { isoDate: element["isoDate"] };
+
+            await this.news.findOneAndUpdate(query, data, options).exec();
+            return { status: 1 }
+        } catch (e) {
+            Winston.error(e);
+            return { status: -1 };
+        }
+    }
+
+    /**
+     * 
+     * @returns {Promise} {status: Number} 
+     */
+    async loadFeed() {
+        try {
+            const newsData = await Reader.parseURL(this.newsUrl);
+            for (const element of newsData.items) {
+                await this.updateDBEntrys(element);
+            }
+            return { status: 1 };
+        } catch (e) {
+            Winston.error(e);
+            return { status: -1 };
+        }
+    }
 }

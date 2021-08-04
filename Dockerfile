@@ -1,4 +1,4 @@
-FROM node:10-alpine
+FROM node:13-alpine
 
 # Creating directory
 RUN mkdir -p /home/node/app/node_modules && chown -R node:node /home/node/app
@@ -17,7 +17,7 @@ RUN npm install
 COPY --chown=node:node . .
 
 # Publish the app port
-EXPOSE 8090
+EXPOSE 8080
 
 # run
 CMD [ "node", "./backend.js" ]

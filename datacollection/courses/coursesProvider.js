@@ -1,54 +1,98 @@
-var axios = require('axios');
+"use strict"
 
-var mongoose = require('mongoose');
-var provider = require('../../utils/modelProvider');
-var course = mongoose.model('courses', provider.getCourseSchema());
+const path = require("path");
+const config = require(path.resolve(process.cwd() + '/config.json'));
+const Winston = new (require("../../utils/Winston"))(config.log).logger;
 
-const courseUrl = "http://ics.mosbach.dhbw.de/ics/calendars.list";
+const axios = require("axios");
 
-exports.run = () => {
-    return new Promise((resolve, reject) => {
-        updateCourses(courseUrl, resolve, reject)
-    })
-}
+module.exports = class CoursesProvider {
 
-const updateCourses = (url, resolve, reject) => {
-    axios.get(url)
-        .then((res) => {
-            var courses = formatAndCleanUp(res.data);
-            courses.forEach(element => {
-                updateDatabase(element, reject);
-            });
-            resolve();
-        })
-        .catch((err) => {
-            reject(err);
-        })
-}
+    /**
+     * Instantiate CoursesProvider
+     * 
+     * @param {String} url 
+     * @param {MongoDb Model} courses 
+     */
+    constructor(url, courses) {
+        this.courseUrl = url;
 
-const formatAndCleanUp = (data) => {
-    const result = [];
-    const year = (new Date()).getFullYear().toString().substr(2);
-    const lines = data.split('\n');
-    lines.forEach(element => {
-        var entry = element.split(';');
-        if ((entry[0].match(/\d+/g)) != null && (entry[0].match(/\d+/g))[0] > (year - 4)) {
-            result.push({ course: entry[0], url: entry[1] });
+        this.courses = courses;
+    }
+
+    /**
+     * 
+     * @param {Object} data 
+     * @returns {Object} {status: {Number}} - e.g. { status: -1 }
+     */
+    async formatAndCleanUp(data) {
+        try {
+            const result = [];
+            const year = (new Date()).getFullYear().toString().substr(2);
+            const lines = data.split('\n');
+            for (const element of lines) {
+                const entry = element.split(';');
+                if ((entry[0].match(/\d+/g)) != null && (entry[0].match(/\d+/g))[0] > (year - 4)) {
+                    result.push({ course: entry[0], url: entry[1] });
+                }
+            }
+            return result;
+        } catch (e) {
+            Winston.error(e);
+            return { status: -1 }
         }
-    });
-    return result;
-}
+    }
 
-const updateDatabase = (element, reject) => {
-    const data = { course: element["course"], url: element["url"] };
-    const options = { upsert: true, new: true, useFindAndModify: false };
-    const query = { course: element["course"] };
 
-    course.findOneAndUpdate(query, data, options)
-        .then((doc) => {
+    /**    
+     * 
+     * @param {Object} element 
+     * @returns {Object} {status: {Number}} - e.g. { status: -1 }
+     */
+    async updateDatabase(element) {
+        try {
+            const data = { course: element["course"], url: element["url"] };
+            const options = { upsert: true, new: true, useFindAndModify: false };
+            const query = { course: element["course"] };
 
-        })
-        .catch((err) => {
-            reject(err);
-        });
+            await this.courses.findOneAndUpdate(query, data, options).exec();
+            return { status: 1 };
+        } catch (e) {
+            Winston.error(e);
+            return { status: -1 }
+        }
+    }
+
+    /**     
+     *
+     * @param {String} url - http url for courses
+     * @returns {Object} {status: {Number}} - e.g. { status: -1 }
+     */
+    async updateCourses(url) {
+        try {
+            const res = await axios.get(url);
+            const coursesArray = await this.formatAndCleanUp(res.data);
+            for (const element of coursesArray) {
+                await this.updateDatabase(element);
+            }
+            return { status: 1 };
+        } catch (e) {
+            Winston.error(e);
+            return { status: -1 }
+        }
+    }
+
+    /**
+     * 
+     * @returns {Promise} {status: Number} 
+     */
+    async run() {
+        try {
+            await this.updateCourses(this.courseUrl);
+            return { status: 1 }
+        } catch (e) {
+            Winston.error(e);
+            return { status: -1 }
+        }
+    }
 }

@@ -87,3 +87,5 @@ typings/
 .dynamodb/
 
 test.js
+.vscode/
+log/

@@ -1,69 +1,108 @@
-var mongoose = require('mongoose')
-var Schema = mongoose.Schema;
+"use strict";
 
-var newsSchema = new Schema({
-    creator: String,
-    title: String,
-    link: String,
-    pubDate: String,
-    'content:encoded': String,
-    'dc:creator': String,
-    content: String,
-    contentSnippet: String,
-    guid: String,
-    isoDate: String
-});
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-exports.getNewsSchema = () => {return newsSchema};
 
-var courseSchema = new Schema({
-    course: String,
-    url: String
-});
+module.exports = class ModelProvider {
 
-exports.getCourseSchema = () => {return courseSchema};
+    /**
+     * Instantiate ModelProvider
+     * This should only be instantiated one time per Application!
+     * Otherwise it breaks with the mongodb model restrictions.
+     * Just pass an instance of this class around your modules
+     * 
+     * @param {Object} dbConnection 
+     */
+    constructor(dbConnection) {
+        this.dbConnection = dbConnection;
 
-var eventSchema = new Schema({
-    dtstart: String,
-    dtend: String,
-    dtstamp: String,
-    uid: String,
-    created: String,
-    description: String,
-    'last-modified': String,
-    location: String,
-    sequence: Number,
-    status: String,
-    summary: String,
-    transp: String
-  });
+        this.newsSchema = dbConnection.model("news", new Schema({
+            creator: String,
+            title: String,
+            link: String,
+            pubDate: String,
+            'content:encoded': String,
+            'dc:creator': String,
+            content: String,
+            contentSnippet: String,
+            guid: String,
+            isoDate: String
+        }));
 
-  exports.getEventSchema = () => {return eventSchema};
+        this.courseSchema = dbConnection.model("courses", new Schema({
+            course: String,
+            url: String
+        }));
 
-var mensaplanSchema = new Schema({
-    validUntil: String,
-    Montag: [String],
-    Dienstag: [String],
-    Mittwoch: [String],
-    Donnerstag: [String],
-    Freitag: [String]
-});
+        this.eventSchema = dbConnection.model("events", new Schema({
+            dtstart: String,
+            dtend: String,
+            dtstamp: String,
+            uid: String,
+            created: String,
+            description: String,
+            'last-modified': String,
+            location: String,
+            sequence: Number,
+            status: String,
+            summary: String,
+            transp: String
+        }));
 
-exports.getMensaplanSchema = () => {return mensaplanSchema};
+        this.mensaplanSchema = dbConnection.model("mensa", new Schema({
+            validUntil: String,
+            Montag: [String],
+            Dienstag: [String],
+            Mittwoch: [String],
+            Donnerstag: [String],
+            Freitag: [String]
+        }));
 
-var lectureSchema = new Schema({
-    uid: String,
-    dtstamp: String,
-    dtstart: String,
-    class: String,
-    created: String,
-    description: String,
-    'last-modified': String,
-    location: String,
-    summary: String,
-    dtend: String,
-    course: String,
-    lastTouched: String
-});
+        this.lectureSchema = dbConnection.model("lecture", new Schema({
+            uid: String,
+            dtstamp: String,
+            dtstart: String,
+            class: String,
+            created: String,
+            description: String,
+            'last-modified': String,
+            location: String,
+            summary: String,
+            dtend: String,
+            course: String,
+            lastTouched: String
+        }));
+    }
 
-exports.getLectureSchema = () => {return lectureSchema};
+    /**
+     * 
+     * @returns this.newsSchema
+     */
+    getNewsSchema() { return this.newsSchema };
+
+    /**
+     * 
+     * @returns this.coursesSchema
+     */
+    getCourseSchema() { return this.courseSchema };
+
+    /**
+     * 
+     * @returns this.eventSchema
+     */
+    getEventSchema() { return this.eventSchema };
+
+    /**
+     * 
+     * @returns this.mensaplanSchema
+     */
+    getMensaplanSchema() { return this.mensaplanSchema };
+
+    /**
+     * 
+     * @returns this.lectureSchema
+     */
+    getLectureSchema() { return this.lectureSchema };
+
+}
