@@ -64,7 +64,7 @@ module.exports = class Scheduler {
             });
             this.agent.define('Update Courses', async (job) => {
                 try {
-                    await this.courseProvider.run();
+                    await this.courseProvider.updateCourses();
                 } catch (e) {
                     Winston.error(e);
                 }

@@ -68,9 +68,9 @@ module.exports = class CoursesProvider {
      * @param {String} url - http url for courses
      * @returns {Object} {status: {Number}} - e.g. { status: -1 }
      */
-    async updateCourses(url) {
+    async updateCourses() {
         try {
-            const res = await axios.get(url);
+            const res = await axios.get(this.courseUrl);
             const coursesArray = await this.formatAndCleanUp(res.data);
             for (const element of coursesArray) {
                 await this.updateDatabase(element);
@@ -82,17 +82,17 @@ module.exports = class CoursesProvider {
         }
     }
 
-    /**
-     * 
-     * @returns {Promise} {status: Number} 
-     */
-    async run() {
-        try {
-            await this.updateCourses(this.courseUrl);
-            return { status: 1 }
-        } catch (e) {
-            Winston.error(e);
-            return { status: -1 }
-        }
-    }
+    // /**
+    //  * 
+    //  * @returns {Promise} {status: Number} 
+    //  */
+    // async run() {
+    //     try {
+    //         await this.updateCourses(this.courseUrl);
+    //         return { status: 1 }
+    //     } catch (e) {
+    //         Winston.error(e);
+    //         return { status: -1 }
+    //     }
+    // }
 }
