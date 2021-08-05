@@ -56,7 +56,7 @@ module.exports = class Scheduler {
         try {
             this.agent.define('Update News', async (job) => {
                 try {
-                    await this.newsProvider.loadFeed();
+                    this.newsProvider.loadFeed();
                 } catch (e) {
                     Winston.error(e);
                 }
@@ -64,7 +64,7 @@ module.exports = class Scheduler {
             });
             this.agent.define('Update Courses', async (job) => {
                 try {
-                    await this.courseProvider.updateCourses();
+                    this.courseProvider.updateCourses();
                 } catch (e) {
                     Winston.error(e);
                 }
@@ -72,7 +72,7 @@ module.exports = class Scheduler {
 
             this.agent.define('Update Events', async (job) => {
                 try {
-                    await this.eventsProvider.updateEvents();
+                    this.eventsProvider.updateEvents();
                 } catch (e) {
                     Winston.error(e);
                 }
@@ -80,7 +80,7 @@ module.exports = class Scheduler {
 
             this.agent.define('Update Mensaplan', async (job) => {
                 try {
-                    await this.mensaplanProvider.updateMensaplan();
+                    this.mensaplanProvider.updateMensaplan();
                 } catch (e) {
                     Winston.error(e);
                 }
@@ -88,7 +88,7 @@ module.exports = class Scheduler {
 
             this.agent.define('Update Lectures', async (job) => {
                 try {
-                    await this.lectureProvider.updateLectures();
+                    this.lectureProvider.updateLectures();
                 } catch (e) {
                     Winston.error(e);
                 }

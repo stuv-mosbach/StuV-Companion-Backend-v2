@@ -10,7 +10,7 @@ module.exports = class MochaRaplaTest {
     async runTest() {
         const _this = this;        
         describe("RaplaTest - test public methods", function () {
-            it("fetchFromRapla", async () => {
+            it("fetchFromRapla()", async () => {
                 const res = await _this.raplaTest.fetchFromRapla();
                 assert.strictEqual(res.data instanceof Array, true);
             });

@@ -86,6 +86,6 @@ typings/
 # DynamoDB Local files
 .dynamodb/
 
-test.js
+# test.js
 .vscode/
 log/

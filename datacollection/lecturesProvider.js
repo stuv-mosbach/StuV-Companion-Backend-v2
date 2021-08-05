@@ -72,12 +72,12 @@ module.exports = class LectureProvider {
             const date = (new Date()).toString();
             for (const element of courses) {
                 if (!element.url) continue;
-                const resElem = await iCalParser.main(element.url);
-                this.cleanUp(date);
+                const resElem = await iCalParser.main(element.url);                
                 for (const item of resElem.events) {
                     item.course = element.course;
                     await this.updateDatabase(item, date);
                 }
+                this.cleanUp(date);
             }
             return { status: 1 }
         } catch (e) {

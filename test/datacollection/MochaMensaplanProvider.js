@@ -5,6 +5,10 @@ const lineSplitter = require('split-lines');
 const crawler = require('crawler-request');
 
 module.exports = class MochaMensaplanProvider {
+    /**
+     * 
+     * @param {*} mensaplanProvider 
+     */
     constructor(mensaplanProvider) {
         this.mensaplanProvider = mensaplanProvider;
     }
