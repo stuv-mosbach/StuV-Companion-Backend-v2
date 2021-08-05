@@ -81,7 +81,7 @@ module.exports = class MensaPlanProvider {
                 Donnerstag: thursday,
                 Freitag: friday
             };
-            return await this.updateDatabase(object);
+            return object;
         } catch (e) {
             Winston.error(e);
             return { status: -1 };
@@ -114,8 +114,7 @@ module.exports = class MensaPlanProvider {
     async updateMensaplan() {
         try {
             const res = await crawler(this.pdfUrl);
-            await this.createJSON(lineSplitter(res.text));
-
+            await this.updateDatabase(await this.createJSON(lineSplitter(res.text)));
             return { status: 1 }
         } catch (e) {
             Winston.error(e);
