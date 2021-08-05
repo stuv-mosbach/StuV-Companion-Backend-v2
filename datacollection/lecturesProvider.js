@@ -34,7 +34,7 @@ module.exports = class LectureProvider {
             try {
                 const query = { lastTouched: { $ne: date } };
                 this.lecture.find(query).remove();
-                return { status: -1 };
+                return { status: 1 };
             } catch (e) {
                 Winston.error(e);
                 return { status: -1 };
