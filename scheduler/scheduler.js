@@ -42,7 +42,7 @@ module.exports = class Scheduler {
 
         this.courseProvider = new (require('../datacollection/coursesProvider'))(this.courseUrl, this.ModelProvider.getCourseSchema());
         this.eventsProvider = new (require('../datacollection/eventsProvider'))(this.eventsUrl, this.ModelProvider.getEventSchema());
-        this.lectureProvider = new (require('../datacollection/lecturesProvider'))(this.ModelProvider.getLectureSchema());
+        this.lectureProvider = new (require('../datacollection/lecturesProvider'))(this.ModelProvider.getCourseSchema(), this.ModelProvider.getLectureSchema());
         this.mensaplanProvider = new (require('../datacollection/mensaplanProvider'))(this.mensaUrl, this.ModelProvider.getMensaplanSchema());
         this.newsProvider = new (require('../datacollection/newsProvider'))(this.newsUrl, this.ModelProvider.getNewsSchema());
     }

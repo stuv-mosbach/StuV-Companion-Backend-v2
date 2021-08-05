@@ -3,8 +3,8 @@
 const assert = require('assert');
 const iCalParser = new (require('../../utils/iCalParser'))();
 
-module.exports = class MochaRaplaTest {
-    constructor(eventsProvider, iCalParser) {
+module.exports = class MochaEventsProvider {
+    constructor(eventsProvider) {
         this.eventsProvider = eventsProvider;
     }
 

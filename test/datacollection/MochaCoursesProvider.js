@@ -3,7 +3,7 @@
 const assert = require('assert');
 const axios = require("axios");
 
-module.exports = class MochaRaplaTest {
+module.exports = class MochaCoursesProvider {
     constructor(coursesProvider) {
         this.coursesProvider = coursesProvider;
     }
