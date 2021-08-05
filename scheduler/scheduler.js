@@ -40,11 +40,11 @@ module.exports = class Scheduler {
                 }
             });
 
-        this.courseProvider = new (require('../datacollection/courses/coursesProvider'))(this.courseUrl, this.ModelProvider.getCourseSchema());
-        this.eventsProvider = new (require('../datacollection/events/eventsProvider'))(this.eventsUrl, this.ModelProvider.getEventSchema());
-        this.lectureProvider = new (require('../datacollection/lectures/lecturesProvider'))(this.ModelProvider.getLectureSchema());
-        this.mensaplanProvider = new (require('../datacollection/mensaplan/mensaplanProvider'))(this.mensaUrl, this.ModelProvider.getMensaplanSchema());
-        this.newsProvider = new (require('../datacollection/news/newsProvider'))(this.newsUrl, this.ModelProvider.getNewsSchema());
+        this.courseProvider = new (require('../datacollection/coursesProvider'))(this.courseUrl, this.ModelProvider.getCourseSchema());
+        this.eventsProvider = new (require('../datacollection/eventsProvider'))(this.eventsUrl, this.ModelProvider.getEventSchema());
+        this.lectureProvider = new (require('../datacollection/lecturesProvider'))(this.ModelProvider.getLectureSchema());
+        this.mensaplanProvider = new (require('../datacollection/mensaplanProvider'))(this.mensaUrl, this.ModelProvider.getMensaplanSchema());
+        this.newsProvider = new (require('../datacollection/newsProvider'))(this.newsUrl, this.ModelProvider.getNewsSchema());
     }
 
     /**

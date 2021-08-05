@@ -2,7 +2,7 @@
 
 const path = require("path");
 const config = require(path.resolve(process.cwd() + '/config.json'));
-const Winston = new (require("../../utils/Winston"))(config.log).logger;
+const Winston = new (require("../utils/Winston"))(config.log).logger;
 
 const ReaderConstructor = require('rss-parser');
 const Reader = new ReaderConstructor();

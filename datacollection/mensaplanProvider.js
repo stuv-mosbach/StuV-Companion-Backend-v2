@@ -2,7 +2,7 @@
 
 const path = require("path");
 const config = require(path.resolve(process.cwd() + '/config.json'));
-const Winston = new (require("../../utils/Winston"))(config.log).logger;
+const Winston = new (require("../utils/Winston"))(config.log).logger;
 
 const lineSplitter = require('split-lines');
 const crawler = require('crawler-request');

@@ -2,10 +2,10 @@
 
 const path = require("path");
 const config = require(path.resolve(process.cwd() + '/config.json'));
-const Winston = new (require("../../utils/Winston"))(config.log).logger;
-const axios = require("axios");
+const Winston = new (require("../utils/Winston"))(config.log).logger;
+// const axios = require("axios");
 
-const iCalParser = new (require('../../utils/iCalParser'))();
+const iCalParser = new (require('../utils/iCalParser'))();
 
 // const mongoose = require('mongoose');
 // const provider = new (require('../../utils/modelProvider'))();
