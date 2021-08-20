@@ -10,9 +10,6 @@ describe("Running testsuite", () => {
             const path = require("path");
             const config = require(path.resolve(process.cwd() + '/config.json'));
 
-            const raplaTest = new (require("../datacollection/RaplaProvider"))(config.staticUrls.rapla);
-            const mocha_raplaTest = new (require("./datacollection/MochaRaplaTest"))(raplaTest);
-
             const dbAdapater = new (require('../utils/dbConfig'))(config.db.host, config.db.port, config.db.env);
             const mongoConnection = await dbAdapater.connect();
 
@@ -32,13 +29,16 @@ describe("Running testsuite", () => {
 
             const newsProvider = new (require("../datacollection/newsProvider"))(config.staticUrls.news, modelProvider.getNewsSchema());
             const mocha_newsProvider = new (require("./datacollection/MochaNewsProvider"))(newsProvider);
+            
+            const raplaTest = new (require("../datacollection/RaplaProvider"))(config.staticUrls.rapla, coursesProvider);
+            const mocha_raplaTest = new (require("./datacollection/MochaRaplaTest"))(raplaTest);
             /************************************* */
 
 
             await mocha_coursesProvider.runTest();
-            await mocha_eventsProvider.runTest();
-            await mocha_lecturesProvider.runTest();
-            await mocha_mensaplanProvider.runTest();
+            // await mocha_eventsProvider.runTest();
+            // await mocha_lecturesProvider.runTest();
+            // await mocha_mensaplanProvider.runTest();
             // await mocha_newsProvider.runTest();            
             await mocha_raplaTest.runTest();
         } catch (error) {
