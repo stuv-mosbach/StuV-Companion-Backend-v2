@@ -35,11 +35,11 @@ describe("Running testsuite", () => {
             /************************************* */
 
 
-            // await mocha_coursesProvider.runTest();
-            // await mocha_eventsProvider.runTest();
-            // await mocha_lecturesProvider.runTest();
-            // await mocha_mensaplanProvider.runTest();
-            // await mocha_newsProvider.runTest();            
+            await mocha_coursesProvider.runTest();
+            await mocha_eventsProvider.runTest();
+            await mocha_lecturesProvider.runTest();
+            await mocha_mensaplanProvider.runTest();
+            await mocha_newsProvider.runTest();            
             await mocha_raplaTest.runTest();
         } catch (error) {
             console.error(error);
