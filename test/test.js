@@ -30,12 +30,12 @@ describe("Running testsuite", () => {
             const newsProvider = new (require("../datacollection/newsProvider"))(config.staticUrls.news, modelProvider.getNewsSchema());
             const mocha_newsProvider = new (require("./datacollection/MochaNewsProvider"))(newsProvider);
             
-            const raplaTest = new (require("../datacollection/RaplaProvider"))(config.staticUrls.rapla, coursesProvider);
+            const raplaTest = new (require("../datacollection/RaplaProvider"))(config.staticUrls.rapla, coursesProvider, lectureProvider);
             const mocha_raplaTest = new (require("./datacollection/MochaRaplaTest"))(raplaTest);
             /************************************* */
 
 
-            await mocha_coursesProvider.runTest();
+            // await mocha_coursesProvider.runTest();
             // await mocha_eventsProvider.runTest();
             // await mocha_lecturesProvider.runTest();
             // await mocha_mensaplanProvider.runTest();

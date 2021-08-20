@@ -14,6 +14,10 @@ module.exports = class MochaRaplaTest {
                 const res = await _this.raplaTest.updateCourses(await _this.raplaTest.fetchFromRapla());
                 assert.strictEqual(res.status, 1);
             });
+            it("updateLectures()", async () => {
+                const res = await _this.raplaTest.updateLectures(await _this.raplaTest.fetchFromRapla());
+                assert.strictEqual(res.status, 1);
+            });
             it("fetchFromRapla()", async () => {
                 const res = await _this.raplaTest.fetchFromRapla();
                 assert.strictEqual(res instanceof Array, true);

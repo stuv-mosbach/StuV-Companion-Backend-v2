@@ -50,7 +50,9 @@ module.exports = class LectureProvider {
      */
     async updateDatabase(element, date) {
         try {
-            const data = { uid: element["uid"], dtstamp: element["dtstamp"], dtstart: element["dtstart"], class: element["class"], created: element["created"], description: element["description"], 'last-modified': element["last-modified"], location: element["location"], summary: element["summary"], dtend: element["dtend"], course: element["course"], lastTouched: date };
+            if(!date) date = new Date();
+
+            const data = { uid: element["uid"], dtstamp: element["dtstamp"], dtstart: element["dtstart"], class: element["class"], created: element["created"], description: element["description"], 'last-modified': element["last-modified"], location: element["location"], summary: element["summary"], dtend: element["dtend"], course: element["course"], lastTouched: date.toISOString() };
             const options = { upsert: true, new: true, useFindAndModify: false };
             const query = { uid: element["uid"] };
             await this.lecture.findOneAndUpdate(query, data, options).exec();

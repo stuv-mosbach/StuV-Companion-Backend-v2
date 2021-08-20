@@ -9,9 +9,40 @@ const Winston = new (require("../utils/Winston"))(config.log).logger;
 module.exports = class RaplaProvider {
 
 
-    constructor(url, CoursesProvider) {
+    constructor(url, CoursesProvider, LecturesProvider) {
         this.url = url;
         this.CoursesProvider = CoursesProvider;
+        this.LecturesProvider = LecturesProvider;
+    }
+
+    async updateLectures(dataSet) {
+        try {
+            if (!dataSet.length) throw new Error("Fetch data first!");
+
+            for (const row of dataSet) {
+                const date = (new Date()).toISOString();
+                await this.LecturesProvider.updateDatabase(
+                    {
+                        uid: '',
+                        dtstamp: date,
+                        dtstart: Date.parse(row.Beginn),
+                        class: 'PUBLIC',
+                        created: date,
+                        description: row.Person,
+                        'last-modified': date,
+                        location: row.Raum,
+                        summary: row.Name,
+                        dtend: Date.parse(row.Ende),
+                        course: row.Kurs,
+                        lastTouched: date
+                    }
+                )
+            }
+            return { status: 1 };
+        } catch (error) {
+            Winston.error(error);
+            return { status: -1 };
+        }
     }
 
     /**
@@ -21,13 +52,13 @@ module.exports = class RaplaProvider {
     async updateCourses(dataSet) {
         try {
             if (!dataSet.length) throw new Error("Fetch data first!");
-            const courses = new Set();
-            for (const row of dataSet) {
-                courses.add({course: row.Kurs});
-            }
 
-            for (const element of courses) {
-                this.CoursesProvider.updateDatabase(element);
+            for (const row of dataSet) {
+                if (!row.Kurs) continue;
+                const courseString = row.Kurs.split(',');
+                for (const element of courseString) {
+                    await this.CoursesProvider.updateDatabase({ course: element });
+                }
             }
             return { status: 1 };
         } catch (e) {
