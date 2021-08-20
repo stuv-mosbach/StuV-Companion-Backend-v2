@@ -2,10 +2,12 @@
 const axios = require("axios");
 const papa = require("papaparse");
 const path = require("path");
+const CoursesProvider = require("./coursesProvider");
 const config = require(path.resolve(process.cwd() + '/config.json'));
 const Winston = new (require("../utils/Winston"))(config.log).logger;
 
-module.exports = class RaplaTest {
+module.exports = class RaplaProvider {
+
 
     constructor(url) {
         this.url = url;
@@ -17,11 +19,8 @@ module.exports = class RaplaTest {
      */
     async fetchFromRapla() {
         try {
-            return axios.get("http://rapla.dhbw.de/rapla/calendar.csv?key=2a9Bq7PTVcTMvCSNwYoQRrO0GK9bccz-i39YnTK__wfzLf7zoDljz6ez6o-rF2FsNTfqDxal3WOuRXkhkcmtBj5Q_Tj-lIMfUEmToGwicEU&salt=11988947&allocatable_id=").then((response) => {
-                const res = response.data;
-                return papa.parse(res);
-            })            
-            
+            const res = await axios.get(this.url, { responseType: 'text', responseEncoding: 'latin1' });
+            return papa.parse(res.data, { delimiter: ';', header: true });
         } catch (error) {
             Winston.error(error);
         }

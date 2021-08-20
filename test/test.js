@@ -10,7 +10,7 @@ describe("Running testsuite", () => {
             const path = require("path");
             const config = require(path.resolve(process.cwd() + '/config.json'));
 
-            const raplaTest = new (require("../datacollection/RaplaTest"))();
+            const raplaTest = new (require("../datacollection/RaplaProvider"))(config.staticUrls.rapla);
             const mocha_raplaTest = new (require("./datacollection/MochaRaplaTest"))(raplaTest);
 
             const dbAdapater = new (require('../utils/dbConfig'))(config.db.host, config.db.port, config.db.env);
