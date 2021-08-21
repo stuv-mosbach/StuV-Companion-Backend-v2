@@ -144,6 +144,7 @@ module.exports = class Scheduler {
              * Courses must be loaded, before lecture job is started
              **/
             await this.courseProvider.updateCourses(this.courseUrl);
+            await this.lectureProvider.updateLectures(true);
             // this.agent. now(['Update Mensaplan', 'Update Lectures', 'Update News', 'Update Events']);
 
             /**

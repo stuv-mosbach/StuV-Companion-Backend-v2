@@ -50,8 +50,7 @@ module.exports = class LectureProvider {
      */
     async updateDatabase(element, date) {
         try {
-            if(!date) date = new Date();
-
+            if (!date) date = new Date();
             const data = { uid: element["uid"], dtstamp: element["dtstamp"], dtstart: element["dtstart"], class: element["class"], created: element["created"], description: element["description"], 'last-modified': element["last-modified"], location: element["location"], summary: element["summary"], dtend: element["dtend"], course: element["course"], lastTouched: date.toISOString() };
             const options = { upsert: true, new: true, useFindAndModify: false };
             const query = { uid: element["uid"] };
@@ -67,15 +66,16 @@ module.exports = class LectureProvider {
      * 
      * @returns {Object} {status: Number} 
      */
-    async updateLectures() {
+    async updateLectures(isFirstRun) {
         try {
             const courses = await this.course.find({}).exec();
 
-            const date = (new Date()).toString();
+            const date = new Date();
             for (const element of courses) {
                 if (!element.url) continue;
-                const resElem = await iCalParser.main(element.url);                
+                const resElem = await iCalParser.main(element.url);
                 for (const item of resElem.events) {
+                    if (!isFirstRun && (!item.dtstart || Date.parse(item.dtstart) < new Date())) continue;
                     item.course = element.course;
                     await this.updateDatabase(item, date);
                 }
