@@ -8,7 +8,7 @@ describe("Running testsuite", () => {
              * Module initialization
              */
             const path = require("path");
-            const config = require(path.resolve(process.cwd() + '/config.json'));
+            const config = require(path.resolve(process.cwd() + '/test/config.json'));
 
             const dbAdapater = new (require('../utils/dbConfig'))(config.db.host, config.db.port, config.db.env);
             const mongoConnection = await dbAdapater.connect();
