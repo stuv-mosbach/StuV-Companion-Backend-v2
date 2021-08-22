@@ -9,5 +9,5 @@ jobs:
     runs-on: ubuntu-latest	
 
     steps:
-     - run: npm ci
+     #- run: npm ci
      - run: npm test
