@@ -1,0 +1,13 @@
+name: UnitTest StuV Companion Backend v2
+
+on: [push]	
+
+jobs:	
+
+  build:	
+
+    runs-on: ubuntu-latest	
+
+    steps:
+      run: npm ci
+      run: npm test
