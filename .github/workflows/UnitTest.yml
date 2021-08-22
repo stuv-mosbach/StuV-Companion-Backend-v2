@@ -1,0 +1,14 @@
+name: UnitTest StuV Companion Backend v2
+
+on: [push]	
+
+jobs:	
+
+  build:	
+
+    runs-on: ubuntu-latest	
+
+    steps:
+     - uses: actions/checkout@v2	
+     - run: npm ci
+     - run: npm test
