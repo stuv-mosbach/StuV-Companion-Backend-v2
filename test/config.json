@@ -11,7 +11,8 @@
         "mensa": "https://www.studentenwerk.uni-heidelberg.de/sites/default/files/download/pdf/sp-mos-mensa-aktuell.pdf",
         "news": "https://stuv-mosbach.de/feed/",
         "courses": "http://ics.mosbach.dhbw.de/ics/calendars.list",
-        "rapla": "http://rapla.dhbw.de/rapla/calendar.csv?key=2a9Bq7PTVcTMvCSNwYoQRrO0GK9bccz-i39YnTK__wfzLf7zoDljz6ez6o-rF2FsNTfqDxal3WOuRXkhkcmtBj5Q_Tj-lIMfUEmToGwicEU&salt=11988947&allocatable_id=",
+        "raplaLectures": "http://rapla.dhbw.de/rapla/calendar.csv?key=2a9Bq7PTVcTMvCSNwYoQRrO0GK9bccz-i39YnTK__wfzLf7zoDljz6ez6o-rF2FsNTfqDxal3WOuRXkhkcmtBj5Q_Tj-lIMfUEmToGwicEU&salt=11988947&allocatable_id=",
+        "raplaCourses": "https://rapla.dhbw.de/rapla/calendar?key=2a9Bq7PTVcTMvCSNwYoQRrO0GK9bccz-i39YnTK__wfzLf7zoDljz6ez6o-rF2Fssfs0IzT-9go2MmAnqMJiPibv24empchmyLIBVY3XjvdFhXxrSKQFBqE30JCP6y_6&salt=11988947", 
         "events": "https://calendar.google.com/calendar/ical/asta.dhbw.de_08mkcuqcrppq8cg8vlutdsgpjg%40group.calendar.google.com/public/basic.ics"
     }, 
     "log":{

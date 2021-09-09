@@ -9,8 +9,9 @@ const Winston = new (require("../utils/Winston"))(config.log).logger;
 module.exports = class RaplaProvider {
 
 
-    constructor(url, CoursesProvider, LecturesProvider) {
-        this.url = url;
+    constructor(lectureUrl, coursesUrl, LecturesProvider, CoursesProvider) {
+        this.lectureUrl = lectureUrl;
+        this.coursesUrl = coursesUrl;
         this.CoursesProvider = CoursesProvider;
         this.LecturesProvider = LecturesProvider;
     }
@@ -87,9 +88,23 @@ module.exports = class RaplaProvider {
      * 
      * @returns 
      */
-    async fetchFromRapla() {
+    async fetchCSVFromRapla() {
         try {
-            const res = await axios.get(this.url, { responseType: 'text', responseEncoding: 'latin1' });
+            const res = await axios.get(this.lectureUrl, { responseType: 'text', responseEncoding: 'latin1' });
+            return (papa.parse(res.data, { delimiter: ';', header: true })).data;
+        } catch (error) {
+            Winston.error(error);
+            return { status: -1 }
+        }
+    }
+
+    /**
+     * 
+     * @returns 
+     */
+     async fetchHTMLFromRapla() {
+        try {
+            const res = await axios.get(this.coursesUrl, { responseType: 'text', responseEncoding: 'latin1' });
             return (papa.parse(res.data, { delimiter: ';', header: true })).data;
         } catch (error) {
             Winston.error(error);
