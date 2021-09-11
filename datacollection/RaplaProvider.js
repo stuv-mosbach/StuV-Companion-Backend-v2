@@ -2,6 +2,7 @@
 const axios = require("axios");
 const papa = require("papaparse");
 const path = require("path");
+const cheerio = require("cheerio");
 // const CoursesProvider = new (require("./coursesProvider"))();
 const config = require(path.resolve(process.cwd() + '/config.json'));
 const Winston = new (require("../utils/Winston"))(config.log).logger;
@@ -104,8 +105,10 @@ module.exports = class RaplaProvider {
      */
      async fetchHTMLFromRapla() {
         try {
-            const res = await axios.get(this.coursesUrl, { responseType: 'text', responseEncoding: 'latin1' });
-            return (papa.parse(res.data, { delimiter: ';', header: true })).data;
+            const res = await cheerio.load((await axios.get(this.coursesUrl)).data);
+            // zweite table --> jede reihe --> dritte spalte
+            return res.html();
+            // return (papa.parse(res.data, { delimiter: ';', header: true })).data;
         } catch (error) {
             Winston.error(error);
             return { status: -1 }

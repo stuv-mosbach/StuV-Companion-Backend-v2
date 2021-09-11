@@ -22,6 +22,10 @@ module.exports = class MochaRaplaTest {
                 const res = await _this.raplaTest.fetchCSVFromRapla();
                 assert.strictEqual(res instanceof Array, true);
             });
+            it("fetchHTMLFromRapla()", async () => {
+                const res = await _this.raplaTest.fetchHTMLFromRapla();
+                assert.strictEqual(res instanceof Array, true);
+            });
         });
     }
 }
